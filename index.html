@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BANK OF AI — On-chain Payments, Identities & DeFi for AI Agents</title>
+  <meta name="description" content="On-chain payments, identities, and DeFi for AI agents. Starting with TRON & BNB Chain — expanding to all chains." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #06060a;
+      --surface: rgba(255,255,255,0.03);
+      --surface-hover: rgba(255,255,255,0.05);
+      --border: rgba(255,255,255,0.06);
+      --border-hover: rgba(255,255,255,0.12);
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --text-faint: #475569;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.08) transparent;
+    }
+
+    /* ── Utility ── */
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    .grid { display: grid; }
+    .flex { display: flex; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .justify-center { justify-content: center; }
+    .text-center { text-align: center; }
+    .relative { position: relative; }
+    .absolute { position: absolute; }
+    .overflow-hidden { overflow: hidden; }
+    .shrink-0 { flex-shrink: 0; }
+    .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .whitespace-pre-line { white-space: pre-line; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* ── Animations ── */
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    @keyframes float-slow { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-8px) rotate(2deg)} }
+    @keyframes pulse-glow {
+      0%,100%{box-shadow:0 0 20px rgba(59,130,246,0.1),0 0 60px rgba(139,92,246,0.05)}
+      50%{box-shadow:0 0 30px rgba(59,130,246,0.2),0 0 80px rgba(139,92,246,0.1)}
+    }
+    @keyframes ping { 75%,100%{transform:scale(2);opacity:0} }
+    @keyframes fade-in-up { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes slide-in { from{opacity:0;transform:translateX(40px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes dash-flow { to{stroke-dashoffset:-20} }
+    @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+    @keyframes gradient-shift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+    .anim-float { animation: float 4s ease-in-out infinite; }
+    .anim-float-d { animation: float 4s ease-in-out 1.5s infinite; }
+    .anim-float-slow { animation: float-slow 6s ease-in-out infinite; }
+    .anim-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+    .anim-fade-in { animation: fade-in-up 0.8s ease-out both; }
+    .anim-slide-in { animation: slide-in 0.8s ease-out both; }
+    .anim-dash { animation: dash-flow 1s linear infinite; }
+
+    .ping-dot { position: relative; display: inline-flex; width: 8px; height: 8px; }
+    .ping-dot::before {
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
+      animation: ping 1s cubic-bezier(0,0,0.2,1) infinite;
+    }
+    .ping-dot::after { content: ''; position: relative; display: block; width: 100%; height: 100%; border-radius: 50%; }
+    .ping-dot.green::before { background: #34d399; opacity: 0.75; }
+    .ping-dot.green::after { background: #34d399; }
+    .ping-dot.blue::before { background: #60a5fa; opacity: 0.75; }
+    .ping-dot.blue::after { background: #60a5fa; }
+
+    /* ── Glass Card ── */
+    .glass {
+      background: var(--surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+    .glass-hover {
+      background: var(--surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+    .glass-hover:hover {
+      background: var(--surface-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 40px rgba(59,130,246,0.05);
+    }
+    .glass-pill { background: var(--surface); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 9999px; }
+
+    /* ── Gradient text ── */
+    .gradient-text {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 40%, #06b6d4 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Backgrounds ── */
+    .mesh-gradient {
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(139,92,246,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 40% 80%, rgba(6,182,212,0.04) 0%, transparent 50%);
+    }
+    .hero-grid {
+      background-image:
+        linear-gradient(rgba(59,130,246,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59,130,246,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .dot-pattern {
+      background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 50%, transparent); }
+    .code-block {
+      background: linear-gradient(145deg, #0d0d14, #111118, #0d0d14);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 0 40px rgba(59,130,246,0.08), 0 0 80px rgba(59,130,246,0.04);
+    }
+
+    /* ── Responsive Grid ── */
+    @media (min-width: 768px) {
+      .md-grid-2 { grid-template-columns: 1fr 1fr; }
+      .md-flex { display: flex; }
+      .md-hidden { display: none !important; }
+    }
+    @media (max-width: 767px) {
+      .sm-hidden { display: none !important; }
+    }
+    @media (min-width: 1024px) {
+      .lg-grid-2 { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── Specific Components ── */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      background: rgba(6,6,10,0.7); backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .header-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+
+    .nav-link {
+      display: flex; align-items: center; gap: 4px; padding: 8px 16px;
+      font-size: 14px; font-weight: 500; color: var(--text-muted);
+      border-radius: 8px; border: none; background: none; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-link:hover { color: #fff; background: rgba(255,255,255,0.04); }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px; padding: 16px 32px;
+      background: linear-gradient(to right, #3b82f6, #2563eb);
+      color: #fff; border-radius: 12px; font-weight: 500; font-size: 14px;
+      border: none; cursor: pointer; text-decoration: none;
+      box-shadow: 0 8px 32px rgba(59,130,246,0.2);
+      transition: all 0.3s;
+    }
+    .btn-primary:hover { box-shadow: 0 8px 32px rgba(59,130,246,0.35); filter: brightness(1.1); }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 10px; padding: 16px 32px;
+      background: var(--surface); color: #fff; border-radius: 12px;
+      font-weight: 500; font-size: 14px; border: 1px solid var(--border);
+      cursor: pointer; text-decoration: none; backdrop-filter: blur(20px);
+      transition: all 0.3s;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.06); }
+
+    .btn-nav {
+      display: flex; align-items: center; gap: 8px; padding: 8px 16px;
+      font-size: 14px; font-weight: 500; color: #fff;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px; cursor: pointer; text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-nav:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.1); }
+
+    .section-num {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 14px; font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 24px;
+    }
+    .section-num .line { width: 32px; height: 1px; }
+
+    .tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 16px; border-radius: 12px; font-size: 14px; font-weight: 500;
+      color: #cbd5e1;
+    }
+
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 14px; border-radius: 9999px; font-size: 12px; font-weight: 600;
+      border: 1px solid;
+    }
+
+    .stat-value { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+    .stat-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); }
+
+    @media (min-width: 768px) {
+      .stat-value { font-size: 28px; }
+      .stat-label { font-size: 12px; }
+    }
+
+    /* Chain badge */
+    .chain-badge {
+      display: flex; align-items: center; gap: 10px; padding: 8px 16px;
+    }
+    .chain-icon {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
+    }
+
+    /* Feature sections */
+    .feature-section { position: relative; padding: 128px 24px; }
+    .feature-section .bg-layer { position: absolute; inset: 0; }
+
+    .feature-title {
+      font-size: 40px; font-weight: 700; color: #fff; line-height: 1.1; margin-bottom: 24px;
+    }
+    .feature-title .muted { color: var(--text-dim); }
+    @media (min-width: 768px) { .feature-title { font-size: 48px; } }
+
+    .feature-desc {
+      font-size: 18px; color: var(--text-muted); line-height: 1.7;
+      margin-bottom: 40px; max-width: 480px;
+    }
+
+    /* Code window */
+    .code-window-bar {
+      display: flex; align-items: center; gap: 0; background: #0a0a12;
+      padding: 16px 16px 0;
+    }
+    .code-dots { display: flex; gap: 6px; margin-right: 24px; }
+    .code-dots span { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.06); }
+    .code-tab {
+      padding: 10px 16px; font-size: 12px; font-weight: 500; border: none;
+      cursor: pointer; border-radius: 8px 8px 0 0; background: transparent;
+      color: var(--text-dim); transition: color 0.2s;
+    }
+    .code-tab.active { background: rgba(255,255,255,0.06); color: #fff; border: 1px solid rgba(255,255,255,0.04); border-bottom: none; }
+    .code-tab .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; }
+    .code-content { padding: 24px; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 2; }
+    .code-indent { padding-left: 24px; }
+    .c-purple { color: #c084fc; }
+    .c-blue { color: #93c5fd; }
+    .c-amber { color: #fcd34d; }
+    .c-green { color: #6ee7b7; }
+    .c-muted { color: #64748b; }
+    .c-slate { color: #94a3b8; }
+
+    /* Identity card */
+    .id-card { overflow: hidden; padding: 24px; position: relative; }
+    .id-addr {
+      display: flex; align-items: center; gap: 12px; padding: 14px;
+      border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.2s;
+    }
+    .id-addr:hover { background: rgba(255,255,255,0.05); }
+    .id-addr-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+    }
+
+    /* Asset dashboard */
+    .asset-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px; border-radius: 12px; transition: background 0.2s;
+    }
+    .asset-item:hover { background: rgba(255,255,255,0.03); }
+    .asset-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+    }
+
+    /* Floating badge */
+    .float-badge {
+      border-radius: 12px; padding: 12px 16px;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .float-badge-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Diagram node */
+    .diagram-node {
+      width: 120px; padding: 16px; text-align: center; border-radius: 16px;
+    }
+    .diagram-node-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 10px;
+    }
+    .diagram-center {
+      width: 140px; padding: 20px; text-align: center; border-radius: 16px;
+      background: linear-gradient(135deg, rgba(59,130,246,0.9), rgba(79,70,229,0.9));
+      border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(8px);
+    }
+
+    /* MCP Server Card */
+    .mcp-card {
+      padding: 24px; position: relative; overflow: hidden;
+    }
+    .mcp-card .glow-bg {
+      position: absolute; inset: 0; opacity: 0; transition: opacity 0.5s; border-radius: 16px;
+    }
+    .mcp-card:hover .glow-bg { opacity: 1; }
+    .mcp-icon {
+      width: 48px; height: 48px; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .mcp-tag {
+      padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600; border: 1px solid;
+    }
+    .mcp-link {
+      display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500;
+      color: var(--text-dim); text-decoration: none; transition: color 0.2s;
+    }
+    .mcp-link:hover { color: #fff; }
+
+    /* Chat window */
+    .chat-window { overflow: hidden; display: flex; flex-direction: column; }
+    .chat-header {
+      padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.04);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .chat-avatar {
+      width: 40px; height: 40px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .chat-messages { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 12px; max-height: 360px; overflow-y: auto; }
+    .chat-row { display: flex; align-items: flex-start; gap: 10px; }
+    .chat-row.user { flex-direction: row-reverse; }
+    .chat-bubble-icon {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .chat-bubble {
+      max-width: 80%; padding: 10px 14px; border-radius: 16px;
+      font-size: 12px; line-height: 1.6;
+    }
+    .chat-bubble.user-msg { background: rgba(59,130,246,0.9); color: #fff; border-bottom-right-radius: 4px; }
+    .chat-bubble.agent-action { background: rgba(16,185,129,0.1); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.15); border-bottom-left-radius: 4px; }
+    .chat-bubble.agent-status { background: rgba(245,158,11,0.1); color: #fcd34d; border: 1px solid rgba(245,158,11,0.15); border-bottom-left-radius: 4px; }
+    .chat-bubble.agent-info { background: rgba(255,255,255,0.04); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.04); border-bottom-left-radius: 4px; }
+    .chat-input-area { padding: 16px; border-top: 1px solid rgba(255,255,255,0.04); }
+    .chat-input-wrap {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.03); border-radius: 12px;
+      padding: 10px 16px; border: 1px solid rgba(255,255,255,0.04);
+    }
+    .chat-input {
+      flex: 1; background: transparent; border: none; outline: none;
+      font-size: 14px; color: #cbd5e1; font-family: inherit;
+    }
+    .chat-input::placeholder { color: var(--text-faint); }
+    .chat-send {
+      width: 32px; height: 32px; border-radius: 8px; background: rgba(59,130,246,0.8);
+      border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .chat-send:hover { background: #3b82f6; }
+
+    /* Footer */
+    .footer { border-top: 1px solid rgba(255,255,255,0.04); }
+    .footer-grid { display: grid; gap: 48px; margin-bottom: 64px; }
+    @media (min-width: 768px) { .footer-grid { grid-template-columns: 1.5fr 1fr 1fr 1fr; } }
+    .footer-heading {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--text-faint); margin-bottom: 20px;
+    }
+    .footer-link {
+      display: block; font-size: 14px; color: var(--text-dim);
+      text-decoration: none; padding: 6px 0; transition: color 0.2s;
+    }
+    .footer-link:hover { color: #fff; }
+    .footer-bottom {
+      padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.04);
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .footer-social {
+      width: 40px; height: 40px; border-radius: 8px; display: flex;
+      align-items: center; justify-content: center; text-decoration: none;
+      transition: background 0.2s; color: var(--text-faint);
+    }
+    .footer-social:hover { background: rgba(255,255,255,0.04); color: #fff; }
+
+    /* ── SVG Icons (inline) ── */
+    .icon { display: inline-block; vertical-align: middle; }
+    .icon svg { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header class="header">
+  <div class="header-inner">
+    <div class="flex items-center" style="gap:10px;">
+      <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#3b82f6,#7c3aed);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(59,130,246,0.2);">
+        <svg viewBox="0 0 20 20" fill="none" width="18" height="18"><path d="M10 2L18 18H2L10 2Z" fill="white" opacity="0.9"/><path d="M10 8L14 16H6L10 8Z" fill="#6366f1" opacity="0.5"/></svg>
+      </div>
+      <span style="font-size:16px;font-weight:700;letter-spacing:-0.02em;color:#fff;">BANK OF AI</span>
+    </div>
+    <nav class="flex items-center sm-hidden" style="gap:4px;">
+      <button class="nav-link">Products <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.5"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button class="nav-link">Developers <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.5"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button class="nav-link">Community <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.5"><path d="M6 9l6 6 6-6"/></svg></button>
+    </nav>
+    <div class="flex items-center sm-hidden" style="gap:12px;">
+      <a href="#" class="nav-link" style="text-decoration:none;">Docs <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg></a>
+      <a href="#" class="btn-nav">Get Started</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="relative overflow-hidden" style="min-height:100vh;display:flex;align-items:center;padding-top:64px;">
+  <div class="absolute" style="inset:0;background:var(--bg);"></div>
+  <div class="absolute mesh-gradient" style="inset:0;"></div>
+  <div class="absolute hero-grid" style="inset:0;opacity:0.4;"></div>
+
+  <!-- Orbs -->
+  <div class="absolute" style="top:25%;left:15%;width:500px;height:500px;background:rgba(59,130,246,0.07);border-radius:50%;filter:blur(120px);"></div>
+  <div class="absolute" style="bottom:25%;right:10%;width:400px;height:400px;background:rgba(139,92,246,0.06);border-radius:50%;filter:blur(100px);"></div>
+  <div class="absolute" style="top:60%;left:50%;width:300px;height:300px;background:rgba(6,182,212,0.04);border-radius:50%;filter:blur(80px);"></div>
+
+  <!-- Floating shapes -->
+  <div class="absolute anim-float" style="top:128px;right:18%;width:8px;height:8px;background:rgba(96,165,250,0.4);transform:rotate(45deg);"></div>
+  <div class="absolute anim-float-d" style="top:45%;left:12%;width:6px;height:6px;background:rgba(167,139,250,0.3);border-radius:50%;"></div>
+  <div class="absolute anim-float-slow" style="bottom:30%;right:22%;width:12px;height:12px;border:1px solid rgba(96,165,250,0.2);transform:rotate(12deg);"></div>
+  <div class="absolute anim-float" style="bottom:40%;left:8%;width:8px;height:8px;background:rgba(34,211,238,0.25);border-radius:50%;"></div>
+
+  <div class="relative container" style="padding-top:96px;padding-bottom:96px;width:100%;">
+    <div class="text-center" style="max-width:896px;margin:0 auto;">
+      <!-- Status badge -->
+      <div class="glass-pill" style="display:inline-flex;align-items:center;gap:10px;padding:8px 16px;font-size:14px;color:#cbd5e1;margin-bottom:40px;">
+        <span class="ping-dot green"></span>
+        Live on TRON &amp; BNB Chain
+      </div>
+
+      <!-- Heading -->
+      <h1 style="font-size:clamp(56px,10vw,128px);font-weight:800;letter-spacing:-0.03em;color:#fff;line-height:0.9;margin-bottom:32px;">
+        BANK OF<br><span class="gradient-text">AI</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p style="max-width:640px;margin:0 auto 48px;font-size:18px;color:var(--text-muted);line-height:1.7;">
+        On-chain payments, identities, and DeFi for AI agents.<br class="sm-hidden">
+        Starting with <span style="color:#f87171;font-weight:500;">TRON</span> &amp;
+        <span style="color:#fbbf24;font-weight:500;">BNB Chain</span> — expanding to all chains.
+      </p>
+
+      <!-- CTAs -->
+      <div class="flex justify-center" style="flex-wrap:wrap;gap:16px;margin-bottom:80px;">
+        <a href="#" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 00-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 004 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+          View on GitHub
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+        <a href="#" class="btn-secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted)"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+          Read the Docs
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <div class="flex justify-center" style="gap:clamp(32px,5vw,64px);flex-wrap:wrap;">
+        <div class="text-center"><div class="stat-value" style="color:#60a5fa;">4</div><div class="stat-label">MCP Servers</div></div>
+        <div class="text-center"><div class="stat-value" style="color:#a78bfa;">2</div><div class="stat-label">Blockchains</div></div>
+        <div class="text-center"><div class="stat-value" style="color:#22d3ee;">x402</div><div class="stat-label">Standard</div></div>
+        <div class="text-center"><div class="stat-value" style="color:#34d399;">ERC-6551</div><div class="stat-label">Identity</div></div>
+      </div>
+
+      <!-- Chain badges -->
+      <div class="flex justify-center items-center" style="gap:16px;margin-top:64px;flex-wrap:wrap;">
+        <div class="glass-pill chain-badge">
+          <div class="chain-icon" style="background:rgba(239,68,68,0.2);"><span style="color:#f87171;">T</span></div>
+          <span style="font-size:14px;color:var(--text-muted);font-weight:500;">TRON</span>
+        </div>
+        <div style="width:1px;height:16px;background:rgba(255,255,255,0.06);"></div>
+        <div class="glass-pill chain-badge">
+          <div class="chain-icon" style="background:rgba(245,158,11,0.2);"><span style="color:#fbbf24;">B</span></div>
+          <span style="font-size:14px;color:var(--text-muted);font-weight:500;">BNB Chain</span>
+        </div>
+        <div style="width:1px;height:16px;background:rgba(255,255,255,0.06);"></div>
+        <div class="glass-pill chain-badge">
+          <div class="chain-icon" style="background:rgba(100,116,139,0.2);"><span style="color:var(--text-muted);">+</span></div>
+          <span style="font-size:14px;color:var(--text-dim);font-weight:500;">More Soon</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom fade -->
+  <div class="absolute" style="bottom:0;left:0;right:0;height:128px;background:linear-gradient(to top,var(--bg),transparent);"></div>
+</section>
+
+<!-- ═══════════════ FEATURE 01: x402 ═══════════════ -->
+<section class="feature-section">
+  <div class="bg-layer dot-pattern" style="opacity:0.3;"></div>
+  <div class="section-divider" style="position:absolute;top:0;left:0;right:0;"></div>
+
+  <div class="relative container">
+    <div class="grid lg-grid-2" style="gap:80px;align-items:center;">
+      <!-- Text -->
+      <div class="anim-fade-in">
+        <div class="section-num" style="color:rgba(96,165,250,0.8);">
+          <span class="line" style="background:linear-gradient(to right,#3b82f6,transparent);"></span> 01
+        </div>
+        <h2 class="feature-title">Complete x402<br><span class="muted">Standard Support</span></h2>
+        <p class="feature-desc">One line of code to accept on-chain payments. Gasless, signature-based payments with zero protocol fees — only network costs.</p>
+        <div class="flex" style="flex-wrap:wrap;gap:12px;">
+          <span class="tag glass"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg> Client SDKs</span>
+          <span class="tag glass"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01"/><path d="M6 18h.01"/></svg> Server SDKs</span>
+          <span class="tag glass"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Facilitator</span>
+          <span class="tag glass"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Zero Fees</span>
+        </div>
+      </div>
+
+      <!-- Code block -->
+      <div class="relative anim-slide-in">
+        <div class="absolute" style="inset:-32px;background:rgba(59,130,246,0.03);border-radius:24px;filter:blur(48px);"></div>
+        <div class="relative code-block overflow-hidden">
+          <div class="code-window-bar">
+            <div class="code-dots"><span></span><span></span><span></span></div>
+            <button class="code-tab active"><span class="dot" style="background:#f87171;box-shadow:0 0 6px rgba(248,113,113,0.5);"></span>TRON</button>
+            <button class="code-tab"><span class="dot" style="background:#fbbf24;"></span>BNB Chain</button>
+          </div>
+          <div class="code-content">
+            <div class="c-muted" style="font-size:12px;margin-bottom:16px;">// One-line payment with x402</div>
+            <div><span class="c-purple">import</span> <span class="c-muted">{ </span><span class="c-blue">payWithX402</span><span class="c-muted"> }</span> <span class="c-purple">from</span> <span class="c-green">'@bankofai/sdk'</span></div>
+            <div style="height:12px;"></div>
+            <div><span class="c-purple">const</span> <span class="c-blue">payment</span> <span class="c-muted">=</span> <span class="c-purple">await</span> <span class="c-amber">payWithX402</span><span class="c-slate">({</span></div>
+            <div class="code-indent"><span class="c-blue">chain</span><span class="c-muted">:</span> <span class="c-green">'tron'</span><span class="c-muted">,</span></div>
+            <div class="code-indent"><span class="c-blue">amount</span><span class="c-muted">:</span> <span class="c-amber">10</span><span class="c-muted">,</span></div>
+            <div class="code-indent"><span class="c-blue">token</span><span class="c-muted">:</span> <span class="c-green">'USDT'</span><span class="c-muted">,</span></div>
+            <div class="code-indent"><span class="c-blue">to</span><span class="c-muted">:</span> <span class="c-green">'TXk8r...9Fq'</span></div>
+            <div><span class="c-slate">})</span></div>
+            <div style="height:12px;"></div>
+            <div class="flex items-center" style="gap:8px;">
+              <span style="width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 6px rgba(52,211,153,0.5);"></span>
+              <span style="color:rgba(52,211,153,0.6);font-size:12px;">✓ Payment confirmed in 3s</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating badges -->
+        <div class="absolute glass float-badge anim-float" style="right:-16px;top:33%;">
+          <div class="float-badge-icon" style="background:rgba(16,185,129,0.1);"><span style="color:#34d399;font-size:14px;">✓</span></div>
+          <div><div style="font-size:12px;font-weight:600;color:#fff;">x402</div><div style="font-size:10px;color:var(--text-dim);">Standard</div></div>
+        </div>
+        <div class="absolute glass float-badge anim-float-d" style="left:-16px;bottom:48px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          <span style="font-size:12px;font-weight:500;color:#cbd5e1;">Zero Protocol Fees</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FEATURE 02: Identity ═══════════════ -->
+<section class="feature-section">
+  <div class="bg-layer mesh-gradient" style="opacity:0.5;"></div>
+  <div class="section-divider" style="position:absolute;top:0;left:0;right:0;"></div>
+
+  <div class="relative container">
+    <div class="grid lg-grid-2" style="gap:80px;align-items:center;">
+      <!-- Card (left on desktop) -->
+      <div class="relative">
+        <div class="absolute" style="inset:-32px;background:rgba(139,92,246,0.03);border-radius:24px;filter:blur(48px);"></div>
+        <div class="relative glass id-card" style="box-shadow:0 0 40px rgba(139,92,246,0.1),0 0 80px rgba(139,92,246,0.05);">
+          <div class="absolute" style="top:0;right:0;width:160px;height:160px;background:linear-gradient(to bottom left,rgba(139,92,246,0.06),transparent);border-radius:0 0 0 100%;"></div>
+          <div class="absolute" style="bottom:0;left:0;width:128px;height:128px;background:linear-gradient(to top right,rgba(59,130,246,0.04),transparent);border-radius:0 100% 0 0;"></div>
+
+          <div class="flex" style="gap:16px;margin-bottom:24px;position:relative;">
+            <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#8b5cf6,#2563eb);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(139,92,246,0.2);">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="white" stroke-width="1.5"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+            </div>
+            <div>
+              <h3 style="font-size:18px;font-weight:700;color:#fff;">AI Agent #1024</h3>
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#34d399;background:rgba(16,185,129,0.1);padding:4px 10px;border-radius:9999px;font-weight:500;margin-top:6px;border:1px solid rgba(16,185,129,0.2);">
+                <span class="ping-dot green" style="width:6px;height:6px;"></span> Verified
+              </span>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="id-addr">
+              <div class="id-addr-icon" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.1);"><span style="color:#f87171;">T</span></div>
+              <div style="min-width:0;"><div style="font-size:10px;color:var(--text-dim);font-weight:500;text-transform:uppercase;letter-spacing:0.05em;">TRON</div><div class="truncate font-mono" style="font-size:12px;color:#cbd5e1;">TXk8rLGsKaDeAbhzy3nprBe6kRp9Fq</div></div>
+            </div>
+            <div class="id-addr">
+              <div class="id-addr-icon" style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.1);"><span style="color:#fbbf24;">B</span></div>
+              <div style="min-width:0;"><div style="font-size:10px;color:var(--text-dim);font-weight:500;text-transform:uppercase;letter-spacing:0.05em;">BNB Chain</div><div class="truncate font-mono" style="font-size:12px;color:#cbd5e1;">0x7a3b...e8f2c941d5</div></div>
+            </div>
+          </div>
+
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:space-between;">
+            <span class="font-mono" style="font-size:12px;color:var(--text-dim);">ERC-6551 TBA</span>
+            <div class="flex" style="gap:6px;">
+              <span style="width:8px;height:8px;border-radius:50%;background:rgba(96,165,250,0.6);"></span>
+              <span style="width:8px;height:8px;border-radius:50%;background:rgba(167,139,250,0.6);"></span>
+              <span style="width:8px;height:8px;border-radius:50%;background:rgba(52,211,153,0.6);"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating badges -->
+        <div class="absolute glass float-badge anim-float" style="left:-24px;top:25%;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><path d="M12 10v4M7.5 5.5A9 9 0 0112 3a9 9 0 014.5 2.5M7.5 18.5A9 9 0 0112 21a9 9 0 004.5-2.5M3 12h4m10 0h4"/><circle cx="12" cy="12" r="3"/></svg>
+          <span style="font-size:12px;font-weight:500;color:#cbd5e1;">DID Registered</span>
+        </div>
+        <div class="absolute glass float-badge anim-float-d" style="right:-16px;bottom:32px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span style="font-size:12px;font-weight:500;color:#cbd5e1;">On-chain</span>
+        </div>
+      </div>
+
+      <!-- Text (right on desktop) -->
+      <div>
+        <div class="section-num" style="color:rgba(167,139,250,0.8);">
+          <span class="line" style="background:linear-gradient(to right,#8b5cf6,transparent);"></span> 02
+        </div>
+        <h2 class="feature-title">On-chain<br><span class="muted">Identity</span></h2>
+        <p class="feature-desc">Register and manage AI agent identities on TRON and BNB Chain. Built on the ERC-6551 standard with NFT-based ownership and built-in reputation systems.</p>
+        <div class="flex" style="flex-wrap:wrap;gap:12px;">
+          <span class="tag glass"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><path d="M12 10v4M7.5 5.5A9 9 0 0112 3a9 9 0 014.5 2.5M7.5 18.5A9 9 0 0112 21a9 9 0 004.5-2.5M3 12h4m10 0h4"/><circle cx="12" cy="12" r="3"/></svg> Unique Identity</span>
+          <span class="tag glass"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Verifiable</span>
+          <span class="tag glass"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.78 7.78 5.5 5.5 0 017.78-7.78zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Self-Sovereign</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FEATURE 03: Asset Management ═══════════════ -->
+<section class="feature-section">
+  <div class="bg-layer dot-pattern" style="opacity:0.2;"></div>
+  <div class="section-divider" style="position:absolute;top:0;left:0;right:0;"></div>
+
+  <div class="relative container">
+    <div class="grid lg-grid-2" style="gap:80px;align-items:center;">
+      <!-- Text -->
+      <div>
+        <div class="section-num" style="color:rgba(52,211,153,0.8);">
+          <span class="line" style="background:linear-gradient(to right,#10b981,transparent);"></span> 03
+        </div>
+        <h2 class="feature-title">On-chain Asset<br><span class="muted">Management</span></h2>
+        <p class="feature-desc">AI agents autonomously lend, swap, and earn yield via MCP toolkits and SDKs — plugged into the leading DeFi protocols.</p>
+        <div class="flex" style="flex-wrap:wrap;gap:12px;">
+          <span class="chip" style="color:#60a5fa;border-color:rgba(59,130,246,0.2);background:rgba(59,130,246,0.05);"><span style="width:6px;height:6px;border-radius:50%;background:currentColor;opacity:0.6;"></span> JustLend</span>
+          <span class="chip" style="color:#fb923c;border-color:rgba(249,115,22,0.2);background:rgba(249,115,22,0.05);"><span style="width:6px;height:6px;border-radius:50%;background:currentColor;opacity:0.6;"></span> SunSwap</span>
+          <span class="chip" style="color:#22d3ee;border-color:rgba(6,182,212,0.2);background:rgba(6,182,212,0.05);"><span style="width:6px;height:6px;border-radius:50%;background:currentColor;opacity:0.6;"></span> PancakeSwap</span>
+          <span class="chip" style="color:#a78bfa;border-color:rgba(139,92,246,0.2);background:rgba(139,92,246,0.05);"><span style="width:6px;height:6px;border-radius:50%;background:currentColor;opacity:0.6;"></span> Lista</span>
+        </div>
+      </div>
+
+      <!-- Dashboard -->
+      <div class="relative">
+        <div class="absolute" style="inset:-32px;background:rgba(16,185,129,0.02);border-radius:24px;filter:blur(48px);"></div>
+        <div class="relative glass overflow-hidden">
+          <!-- Header -->
+          <div style="padding:20px;border-bottom:1px solid rgba(255,255,255,0.04);">
+            <div class="flex items-center justify-between">
+              <div>
+                <div style="font-size:10px;color:var(--text-dim);font-weight:500;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Portfolio Value</div>
+                <div style="font-size:24px;font-weight:700;color:#fff;">$24,892.54</div>
+              </div>
+              <div class="flex items-center" style="gap:4px;padding:6px 12px;border-radius:9999px;background:rgba(16,185,129,0.1);color:#34d399;font-size:12px;font-weight:600;border:1px solid rgba(16,185,129,0.2);">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+                +12.4%
+              </div>
+            </div>
+          </div>
+          <!-- Chart -->
+          <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.04);">
+            <svg viewBox="0 0 400 80" style="width:100%;height:64px;" preserveAspectRatio="none">
+              <defs><linearGradient id="cf" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10b981" stop-opacity="0.1"/><stop offset="100%" stop-color="#10b981" stop-opacity="0"/></linearGradient></defs>
+              <path d="M0 60Q50 55 100 40T200 30T300 20T400 15V80H0Z" fill="url(#cf)"/>
+              <path d="M0 60Q50 55 100 40T200 30T300 20T400 15" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="400" cy="15" r="3" fill="#10b981"><animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/></circle>
+            </svg>
+          </div>
+          <!-- Assets -->
+          <div style="padding:20px;display:flex;flex-direction:column;gap:8px;">
+            <div class="asset-item">
+              <div class="flex items-center" style="gap:12px;">
+                <div class="asset-icon" style="background:rgba(16,185,129,0.15);color:#34d399;">U</div>
+                <div><div style="font-size:14px;font-weight:600;color:#fff;">USDT</div><div style="font-size:10px;color:var(--text-dim);">TRON</div></div>
+              </div>
+              <div style="text-align:right;"><div style="font-size:14px;font-weight:500;color:#e2e8f0;">$15,200.00</div><div class="flex items-center justify-end" style="font-size:10px;font-weight:500;color:#34d399;gap:2px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>+2.1%</div></div>
+            </div>
+            <div class="asset-item">
+              <div class="flex items-center" style="gap:12px;">
+                <div class="asset-icon" style="background:rgba(239,68,68,0.15);color:#f87171;">T</div>
+                <div><div style="font-size:14px;font-weight:600;color:#fff;">TRX</div><div style="font-size:10px;color:var(--text-dim);">TRON</div></div>
+              </div>
+              <div style="text-align:right;"><div style="font-size:14px;font-weight:500;color:#e2e8f0;">$4,892.30</div><div class="flex items-center justify-end" style="font-size:10px;font-weight:500;color:#34d399;gap:2px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>+8.5%</div></div>
+            </div>
+            <div class="asset-item">
+              <div class="flex items-center" style="gap:12px;">
+                <div class="asset-icon" style="background:rgba(245,158,11,0.15);color:#fbbf24;">B</div>
+                <div><div style="font-size:14px;font-weight:600;color:#fff;">BNB</div><div style="font-size:10px;color:var(--text-dim);">BSC</div></div>
+              </div>
+              <div style="text-align:right;"><div style="font-size:14px;font-weight:500;color:#e2e8f0;">$3,100.24</div><div class="flex items-center justify-end" style="font-size:10px;font-weight:500;color:#f87171;gap:2px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 7l-9.2 9.2M7 7v10h10"/></svg>-1.2%</div></div>
+            </div>
+            <div class="asset-item">
+              <div class="flex items-center" style="gap:12px;">
+                <div class="asset-icon" style="background:rgba(59,130,246,0.15);color:#60a5fa;">U</div>
+                <div><div style="font-size:14px;font-weight:600;color:#fff;">USDC</div><div style="font-size:10px;color:var(--text-dim);">BSC</div></div>
+              </div>
+              <div style="text-align:right;"><div style="font-size:14px;font-weight:500;color:#e2e8f0;">$1,700.00</div><div class="flex items-center justify-end" style="font-size:10px;font-weight:500;color:#34d399;gap:2px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>+0.1%</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating badges -->
+        <div class="absolute glass float-badge anim-float" style="right:-16px;top:48px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          <div><div style="font-size:12px;font-weight:600;color:#fff;">APY 8.2%</div><div style="font-size:10px;color:var(--text-dim);">JustLend</div></div>
+        </div>
+        <div class="absolute glass float-badge anim-float-d" style="left:-24px;bottom:64px;">
+          <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="#60a5fa" stroke-width="1.5"><path d="M4 2v12M12 14V2M4 6l-2-2 2-2M12 10l2 2-2 2"/></svg>
+          <span style="font-size:12px;font-weight:500;color:#cbd5e1;">Auto Swap</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FEATURE 04: OpenClaw ═══════════════ -->
+<section class="feature-section">
+  <div class="bg-layer mesh-gradient" style="opacity:0.4;"></div>
+  <div class="section-divider" style="position:absolute;top:0;left:0;right:0;"></div>
+
+  <div class="relative container">
+    <div class="grid lg-grid-2" style="gap:80px;align-items:center;">
+      <!-- Text -->
+      <div>
+        <div class="section-num" style="color:rgba(129,140,248,0.8);">
+          <span class="line" style="background:linear-gradient(to right,#6366f1,transparent);"></span> 04
+        </div>
+        <h2 class="feature-title">Drop-in OpenClaw<br><span class="muted">Integration</span></h2>
+        <p class="feature-desc">An extension that gives any OpenClaw agent full banking capabilities — payments, identities, DeFi — out of the box.</p>
+        <div class="flex" style="flex-wrap:wrap;gap:12px;">
+          <span class="tag glass"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2"><path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 01-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 10-3.214 3.214c.446.166.855.497.925.968a.979.979 0 01-.276.837l-1.61 1.61a2.404 2.404 0 01-1.705.707 2.402 2.402 0 01-1.704-.706l-1.568-1.568a1.026 1.026 0 00-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 11-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 00-.289-.877l-1.568-1.568A2.402 2.402 0 011.998 12c0-.617.236-1.234.706-1.704L4.23 8.77c.24-.24.581-.353.917-.303.515.077.877.528 1.073 1.01a2.5 2.5 0 103.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402 2.402 0 0112 1.998c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.968a2.5 2.5 0 113.237 3.237c-.464.18-.894.527-.967 1.02z"/></svg> Plug &amp; Play</span>
+          <span class="tag glass"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2"><rect x="2" y="6" width="20" height="4" rx="1"/><rect x="2" y="14" width="20" height="4" rx="1"/></svg> Modular</span>
+          <span class="tag glass"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg> Auto-Config</span>
+        </div>
+      </div>
+
+      <!-- Diagram -->
+      <div class="relative">
+        <div class="absolute" style="inset:-32px;background:rgba(99,102,241,0.03);border-radius:24px;filter:blur(48px);"></div>
+        <div class="relative flex justify-center items-center">
+          <div class="relative" style="width:400px;height:320px;">
+            <!-- SVG Connections -->
+            <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 400 320" fill="none">
+              <defs><linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6366f1" stop-opacity="0.4"/><stop offset="100%" stop-color="#6366f1" stop-opacity="0.1"/></linearGradient></defs>
+              <line x1="200" y1="160" x2="60" y2="60" stroke="url(#lg1)" stroke-width="1" stroke-dasharray="6 4" class="anim-dash"/>
+              <line x1="200" y1="160" x2="340" y2="60" stroke="url(#lg1)" stroke-width="1" stroke-dasharray="6 4" class="anim-dash"/>
+              <line x1="200" y1="160" x2="60" y2="260" stroke="url(#lg1)" stroke-width="1" stroke-dasharray="6 4" class="anim-dash"/>
+              <line x1="200" y1="160" x2="340" y2="260" stroke="url(#lg1)" stroke-width="1" stroke-dasharray="6 4" class="anim-dash"/>
+              <circle r="3" fill="#818cf8" opacity="0.8"><animateMotion dur="2.5s" repeatCount="indefinite" path="M200,160 L60,60"/></circle>
+              <circle r="3" fill="#818cf8" opacity="0.8"><animateMotion dur="3s" repeatCount="indefinite" path="M200,160 L340,60"/></circle>
+              <circle r="3" fill="#818cf8" opacity="0.8"><animateMotion dur="3.5s" repeatCount="indefinite" path="M200,160 L60,260"/></circle>
+              <circle r="3" fill="#818cf8" opacity="0.8"><animateMotion dur="4s" repeatCount="indefinite" path="M200,160 L340,260"/></circle>
+            </svg>
+
+            <!-- Top-left: OpenClaw -->
+            <div class="absolute glass-hover" style="left:0;top:0;">
+              <div class="diagram-node">
+                <div class="diagram-node-icon" style="background:linear-gradient(135deg,#6366f1,#7c3aed);box-shadow:0 4px 16px rgba(99,102,241,0.2);">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 01-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 10-3.214 3.214c.446.166.855.497.925.968a.979.979 0 01-.276.837l-1.61 1.61a2.404 2.404 0 01-1.705.707 2.402 2.402 0 01-1.704-.706l-1.568-1.568a1.026 1.026 0 00-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 11-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 00-.289-.877l-1.568-1.568A2.402 2.402 0 011.998 12c0-.617.236-1.234.706-1.704L4.23 8.77c.24-.24.581-.353.917-.303.515.077.877.528 1.073 1.01a2.5 2.5 0 103.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402 2.402 0 0112 1.998c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.968a2.5 2.5 0 113.237 3.237c-.464.18-.894.527-.967 1.02z"/></svg>
+                </div>
+                <div style="font-size:12px;font-weight:700;color:#fff;">OpenClaw</div>
+                <div style="font-size:9px;color:var(--text-dim);margin-top:2px;">AI Agent</div>
+              </div>
+            </div>
+
+            <!-- Top-right: Extension -->
+            <div class="absolute glass-hover" style="right:0;top:0;">
+              <div class="diagram-node">
+                <div class="diagram-node-icon" style="background:linear-gradient(135deg,#8b5cf6,#c026d3);box-shadow:0 4px 16px rgba(139,92,246,0.2);">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="6" width="20" height="4" rx="1"/><rect x="2" y="14" width="20" height="4" rx="1"/></svg>
+                </div>
+                <div style="font-size:12px;font-weight:700;color:#fff;">Extension</div>
+                <div style="font-size:9px;color:var(--text-dim);margin-top:2px;">Plugin</div>
+              </div>
+            </div>
+
+            <!-- Center: Bank of AI -->
+            <div class="absolute anim-pulse-glow" style="left:50%;top:50%;transform:translate(-50%,-50%);">
+              <div class="diagram-center">
+                <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;backdrop-filter:blur(8px);">
+                  <svg viewBox="0 0 32 32" width="28" height="28" fill="none"><path d="M16 2L28 28H4L16 2Z" fill="white" opacity="0.9"/><path d="M16 10L22 24H10L16 10Z" fill="#6366f1" opacity="0.5"/></svg>
+                </div>
+                <div style="font-size:12px;font-weight:700;color:#fff;">Bank of AI</div>
+                <div style="font-size:9px;color:rgba(191,219,254,0.8);margin-top:2px;">Core Engine</div>
+              </div>
+            </div>
+
+            <!-- Bottom-left: Payments -->
+            <div class="absolute glass-hover" style="left:0;bottom:0;">
+              <div class="diagram-node">
+                <div class="diagram-node-icon" style="background:linear-gradient(135deg,#10b981,#0d9488);box-shadow:0 4px 16px rgba(16,185,129,0.2);">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                </div>
+                <div style="font-size:12px;font-weight:700;color:#fff;">Payments</div>
+                <div style="font-size:9px;color:var(--text-dim);margin-top:2px;">x402</div>
+              </div>
+            </div>
+
+            <!-- Bottom-right: Identities -->
+            <div class="absolute glass-hover" style="right:0;bottom:0;">
+              <div class="diagram-node">
+                <div class="diagram-node-icon" style="background:linear-gradient(135deg,#f59e0b,#ea580c);box-shadow:0 4px 16px rgba(245,158,11,0.2);">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                </div>
+                <div style="font-size:12px;font-weight:700;color:#fff;">Identities</div>
+                <div style="font-size:9px;color:var(--text-dim);margin-top:2px;">DeFi</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ MCP SERVERS ═══════════════ -->
+<section class="feature-section">
+  <div class="bg-layer dot-pattern" style="opacity:0.2;"></div>
+  <div class="section-divider" style="position:absolute;top:0;left:0;right:0;"></div>
+
+  <div class="relative container">
+    <div class="text-center" style="margin-bottom:80px;">
+      <div class="section-num justify-center" style="color:rgba(34,211,238,0.8);display:flex;">
+        <span class="line" style="background:linear-gradient(to right,#06b6d4,transparent);"></span>
+        ECOSYSTEM
+        <span class="line" style="background:linear-gradient(to left,#06b6d4,transparent);"></span>
+      </div>
+      <h2 style="font-size:clamp(32px,5vw,48px);font-weight:700;color:#fff;margin-bottom:24px;">MCP Server Ecosystem</h2>
+      <p style="font-size:18px;color:var(--text-muted);max-width:640px;margin:0 auto;line-height:1.7;">
+        Ready-to-use MCP servers that let AI agents interact with TRON DeFi protocols — plug in and go.
+      </p>
+    </div>
+
+    <div class="grid md-grid-2" style="gap:20px;">
+      <!-- TRON-MCP -->
+      <div class="glass-hover mcp-card">
+        <div class="glow-bg" style="background:radial-gradient(ellipse at center,rgba(239,68,68,0.06),transparent 70%);"></div>
+        <div class="relative">
+          <div class="flex" style="gap:16px;margin-bottom:20px;align-items:flex-start;">
+            <div class="mcp-icon" style="background:linear-gradient(135deg,#ef4444,#e11d48);box-shadow:0 4px 16px rgba(239,68,68,0.2);">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="white" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05"/><path d="M12 22.08V12"/></svg>
+            </div>
+            <div>
+              <h3 style="font-size:16px;font-weight:700;color:#fff;">TRON-MCP-Server</h3>
+              <p style="font-size:14px;color:var(--text-muted);margin-top:6px;line-height:1.6;">Core TRON blockchain operations — transfers, balance queries, contract calls, and account management for AI agents.</p>
+            </div>
+          </div>
+          <div class="flex" style="flex-wrap:wrap;gap:8px;margin-bottom:20px;">
+            <span class="mcp-tag" style="color:#f87171;background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.1);">Transfer</span>
+            <span class="mcp-tag" style="color:#f87171;background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.1);">Balance</span>
+            <span class="mcp-tag" style="color:#f87171;background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.1);">Contract</span>
+            <span class="mcp-tag" style="color:#f87171;background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.1);">Account</span>
+          </div>
+          <div class="flex items-center" style="gap:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.04);">
+            <a href="#" class="mcp-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 00-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 004 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg> GitHub</a>
+            <a href="#" class="mcp-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Docs</a>
+            <a href="#" class="mcp-link" style="margin-left:auto;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUK-MCP -->
+      <div class="glass-hover mcp-card">
+        <div class="glow-bg" style="background:radial-gradient(ellipse at center,rgba(249,115,22,0.06),transparent 70%);"></div>
+        <div class="relative">
+          <div class="flex" style="gap:16px;margin-bottom:20px;align-items:flex-start;">
+            <div class="mcp-icon" style="background:linear-gradient(135deg,#f97316,#d97706);box-shadow:0 4px 16px rgba(249,115,22,0.2);">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="white" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05"/><path d="M12 22.08V12"/></svg>
+            </div>
+            <div>
+              <h3 style="font-size:16px;font-weight:700;color:#fff;">SUK-MCP-Server</h3>
+              <p style="font-size:14px;color:var(--text-muted);margin-top:6px;line-height:1.6;">SunSwap DEX integration — token swaps, liquidity management, price queries, and pool analytics for AI agents.</p>
+            </div>
+          </div>
+          <div class="flex" style="flex-wrap:wrap;gap:8px;margin-bottom:20px;">
+            <span class="mcp-tag" style="color:#fb923c;background:rgba(249,115,22,0.1);border-color:rgba(249,115,22,0.1);">Swap</span>
+            <span class="mcp-tag" style="color:#fb923c;background:rgba(249,115,22,0.1);border-color:rgba(249,115,22,0.1);">Liquidity</span>
+            <span class="mcp-tag" style="color:#fb923c;background:rgba(249,115,22,0.1);border-color:rgba(249,115,22,0.1);">Price</span>
+            <span class="mcp-tag" style="color:#fb923c;background:rgba(249,115,22,0.1);border-color:rgba(249,115,22,0.1);">Pools</span>
+          </div>
+          <div class="flex items-center" style="gap:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.04);">
+            <a href="#" class="mcp-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 00-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 004 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg> GitHub</a>
+            <a href="#" class="mcp-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Docs</a>
+            <a href="#" class="mcp-link" style="margin-left:auto;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- JustLend-MCP -->
+      <div class="glass-hover mcp-card">
+        <div class="glow-bg" style="background:radial-gradient(ellipse at center,rgba(59,130,246,0.06),transparent 70%);"></div>
+        <div class="relative">
+          <div class="flex" style="gap:16px;margin-bottom:20px;align-items:flex-start;">
+            <div class="mcp-icon" style="background:linear-gradient(135deg,#3b82f6,#4f46e5);box-shadow:0 4px 16px rgba(59,130,246,0.2);">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="white" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05"/><path d="M12 22.08V12"/></svg>
+            </div>
+            <div>
+              <h3 style="font-size:16px;font-weight:700;color:#fff;">JustLend-MCP-Server</h3>
+              <p style="font-size:14px;color:var(--text-muted);margin-top:6px;line-height:1.6;">JustLend protocol integration — lending, borrowing, deposit management, and yield optimization for AI agents.</p>
+            </div>
+          </div>
+          <div class="flex" style="flex-wrap:wrap;gap:8px;margin-bottom:20px;">
+            <span class="mcp-tag" style="color:#60a5fa;background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.1);">Lend</span>
+            <span class="mcp-tag" style="color:#60a5fa;background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.1);">Borrow</span>
+            <span class="mcp-tag" style="color:#60a5fa;background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.1);">Deposit</span>
+            <span class="mcp-tag" style="color:#60a5fa;background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.1);">Yield</span>
+          </div>
+          <div class="flex items-center" style="gap:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.04);">
+            <a href="#" class="mcp-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 00-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 004 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg> GitHub</a>
+            <a href="#" class="mcp-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Docs</a>
+            <a href="#" class="mcp-link" style="margin-left:auto;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- TronScan-MCP -->
+      <div class="glass-hover mcp-card">
+        <div class="glow-bg" style="background:radial-gradient(ellipse at center,rgba(16,185,129,0.06),transparent 70%);"></div>
+        <div class="relative">
+          <div class="flex" style="gap:16px;margin-bottom:20px;align-items:flex-start;">
+            <div class="mcp-icon" style="background:linear-gradient(135deg,#10b981,#0d9488);box-shadow:0 4px 16px rgba(16,185,129,0.2);">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="white" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05"/><path d="M12 22.08V12"/></svg>
+            </div>
+            <div>
+              <h3 style="font-size:16px;font-weight:700;color:#fff;">TronScan-MCP-Server</h3>
+              <p style="font-size:14px;color:var(--text-muted);margin-top:6px;line-height:1.6;">TronScan explorer integration — on-chain data queries, transaction tracking, statistics analytics, and token info for AI agents.</p>
+            </div>
+          </div>
+          <div class="flex" style="flex-wrap:wrap;gap:8px;margin-bottom:20px;">
+            <span class="mcp-tag" style="color:#34d399;background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.1);">Query</span>
+            <span class="mcp-tag" style="color:#34d399;background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.1);">Tracking</span>
+            <span class="mcp-tag" style="color:#34d399;background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.1);">Analytics</span>
+            <span class="mcp-tag" style="color:#34d399;background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.1);">Tokens</span>
+          </div>
+          <div class="flex items-center" style="gap:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.04);">
+            <a href="#" class="mcp-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 00-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 004 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg> GitHub</a>
+            <a href="#" class="mcp-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Docs</a>
+            <a href="#" class="mcp-link" style="margin-left:auto;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ LIVE DEMO ═══════════════ -->
+<section class="feature-section">
+  <div class="bg-layer mesh-gradient" style="opacity:0.3;"></div>
+  <div class="section-divider" style="position:absolute;top:0;left:0;right:0;"></div>
+
+  <div class="relative container">
+    <div class="text-center" style="margin-bottom:80px;">
+      <div class="glass-pill" style="display:inline-flex;align-items:center;gap:10px;padding:8px 16px;font-size:14px;color:#93c5fd;font-weight:500;margin-bottom:24px;">
+        <span class="ping-dot blue"></span>
+        Interactive Preview
+      </div>
+      <h2 style="font-size:clamp(32px,5vw,48px);font-weight:700;color:#fff;margin-bottom:24px;">Live Demo</h2>
+      <p style="font-size:18px;color:var(--text-muted);max-width:640px;margin:0 auto;line-height:1.7;">
+        OpenClaw + BANK OF AI — real interactions on TRON and BNB Chain.
+      </p>
+    </div>
+
+    <div class="grid md-grid-2" style="gap:24px;max-width:960px;margin:0 auto;">
+      <!-- TRON Chat -->
+      <div class="glass chat-window" style="border-radius:16px;">
+        <div class="chat-header">
+          <div class="chat-avatar" style="background:linear-gradient(135deg,#ef4444,#e11d48);box-shadow:0 4px 16px rgba(239,68,68,0.2);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 8V4H8"/><rect x="8" y="2" width="13" height="20" rx="1"/><path d="M3 10a2 2 0 012-2h2"/><path d="M3 14a2 2 0 002 2h2"/></svg>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#fff;">BANK OF AI Agent — TRON</div>
+            <div style="font-size:10px;color:var(--text-dim);">TRON Network Operations</div>
+          </div>
+          <div class="flex items-center" style="margin-left:auto;gap:6px;">
+            <span class="ping-dot green" style="width:6px;height:6px;"></span>
+            <span style="font-size:10px;color:#34d399;font-weight:500;">Online</span>
+          </div>
+        </div>
+        <div class="chat-messages">
+          <div class="chat-row user"><div class="chat-bubble-icon" style="background:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.2);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="chat-bubble user-msg">Check TRX Balance</div></div>
+          <div class="chat-row"><div class="chat-bubble-icon" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.06);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M12 8V4H8"/><rect x="8" y="2" width="13" height="20" rx="1"/></svg></div><div class="chat-bubble agent-info">Current Balance: 4,892 TRX ($489.20)</div></div>
+          <div class="chat-row user"><div class="chat-bubble-icon" style="background:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.2);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="chat-bubble user-msg">Transfer 10 TRX to Txm...7Kpq</div></div>
+          <div class="chat-row"><div class="chat-bubble-icon" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.06);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M12 8V4H8"/><rect x="8" y="2" width="13" height="20" rx="1"/></svg></div><div class="chat-bubble agent-action">✓ Sent 10 TRX to Txm...7Kpq</div></div>
+          <div class="chat-row user"><div class="chat-bubble-icon" style="background:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.2);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="chat-bubble user-msg">Check My USDT Balance</div></div>
+          <div class="chat-row"><div class="chat-bubble-icon" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.06);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M12 8V4H8"/><rect x="8" y="2" width="13" height="20" rx="1"/></svg></div><div class="chat-bubble agent-info">Current Balance: 15,200 USDT</div></div>
+        </div>
+        <div class="chat-input-area">
+          <div class="chat-input-wrap">
+            <input type="text" class="chat-input" placeholder="Message..." readonly />
+            <button class="chat-send"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BNB Chat -->
+      <div class="glass chat-window" style="border-radius:16px;">
+        <div class="chat-header">
+          <div class="chat-avatar" style="background:linear-gradient(135deg,#f59e0b,#ea580c);box-shadow:0 4px 16px rgba(245,158,11,0.2);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 8V4H8"/><rect x="8" y="2" width="13" height="20" rx="1"/><path d="M3 10a2 2 0 012-2h2"/><path d="M3 14a2 2 0 002 2h2"/></svg>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#fff;">BANK OF AI Agent — BNB Chain</div>
+            <div style="font-size:10px;color:var(--text-dim);">BNB Chain Market Data</div>
+          </div>
+          <div class="flex items-center" style="margin-left:auto;gap:6px;">
+            <span class="ping-dot green" style="width:6px;height:6px;"></span>
+            <span style="font-size:10px;color:#34d399;font-weight:500;">Online</span>
+          </div>
+        </div>
+        <div class="chat-messages">
+          <div class="chat-row user"><div class="chat-bubble-icon" style="background:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.2);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="chat-bubble user-msg">Retrieve Market Data from https://bankofai.io</div></div>
+          <div class="chat-row"><div class="chat-bubble-icon" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.06);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M12 8V4H8"/><rect x="8" y="2" width="13" height="20" rx="1"/></svg></div><div class="chat-bubble agent-status">← HTTP 402: Payment of $0.01 required</div></div>
+          <div class="chat-row"><div class="chat-bubble-icon" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.06);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M12 8V4H8"/><rect x="8" y="2" width="13" height="20" rx="1"/></svg></div><div class="chat-bubble agent-action">Processing payment to unlock resource...</div></div>
+          <div class="chat-row"><div class="chat-bubble-icon" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.06);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M12 8V4H8"/><rect x="8" y="2" width="13" height="20" rx="1"/></svg></div><div class="chat-bubble agent-action">✓ Payment Confirmed: $0.01 USDT (BNB Chain Mainnet)</div></div>
+          <div class="chat-row"><div class="chat-bubble-icon" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.06);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M12 8V4H8"/><rect x="8" y="2" width="13" height="20" rx="1"/></svg></div><div class="chat-bubble agent-info">Market Update:</div></div>
+          <div class="chat-row"><div class="chat-bubble-icon" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.06);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M12 8V4H8"/><rect x="8" y="2" width="13" height="20" rx="1"/></svg></div><div class="chat-bubble agent-info whitespace-pre-line">BNB $612.78 | TRX $0.108 | MKR $3,300
+Volume 24h: ↑ Trend Bullish</div></div>
+        </div>
+        <div class="chat-input-area">
+          <div class="chat-input-wrap">
+            <input type="text" class="chat-input" placeholder="Message..." readonly />
+            <button class="chat-send"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="container" style="padding-top:64px;padding-bottom:64px;">
+    <div class="footer-grid">
+      <!-- Brand -->
+      <div>
+        <div class="flex items-center" style="gap:10px;margin-bottom:20px;">
+          <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#3b82f6,#7c3aed);display:flex;align-items:center;justify-content:center;">
+            <svg viewBox="0 0 20 20" fill="none" width="14" height="14"><path d="M10 2L18 18H2L10 2Z" fill="white" opacity="0.9"/><path d="M10 8L14 16H6L10 8Z" fill="#6366f1" opacity="0.5"/></svg>
+          </div>
+          <span style="font-size:16px;font-weight:700;letter-spacing:-0.02em;color:#fff;">BANK OF AI</span>
+        </div>
+        <p style="font-size:14px;color:var(--text-dim);line-height:1.7;">On-chain payments, identities, and DeFi for AI agents.</p>
+      </div>
+      <!-- Product -->
+      <div>
+        <h4 class="footer-heading">Product</h4>
+        <a href="#" class="footer-link">x402 Payments</a>
+        <a href="#" class="footer-link">On-chain Identity</a>
+        <a href="#" class="footer-link">Asset Management</a>
+        <a href="#" class="footer-link">OpenClaw Extension</a>
+      </div>
+      <!-- Developers -->
+      <div>
+        <h4 class="footer-heading">Developers</h4>
+        <a href="#" class="footer-link">Documentation</a>
+        <a href="#" class="footer-link">MCP Servers</a>
+        <a href="#" class="footer-link">SDK Reference</a>
+        <a href="#" class="footer-link">API Guide</a>
+      </div>
+      <!-- Community -->
+      <div>
+        <h4 class="footer-heading">Community</h4>
+        <a href="#" class="footer-link">GitHub</a>
+        <a href="#" class="footer-link">Discord</a>
+        <a href="#" class="footer-link">Twitter</a>
+        <a href="#" class="footer-link">Blog</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div style="font-size:14px;color:var(--text-faint);">© 2025 Bank of AI. All rights reserved.</div>
+      <div class="flex" style="gap:8px;">
+        <a href="#" class="footer-social">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 00-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 004 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+        </a>
+        <a href="#" class="footer-social">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
