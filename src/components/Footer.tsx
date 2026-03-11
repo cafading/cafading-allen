@@ -4,56 +4,39 @@ import { Github, Twitter } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-950 text-white">
+    <footer className="relative border-t border-white/[0.04]">
       <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid md:grid-cols-4 gap-12 mb-12">
+        <div className="grid md:grid-cols-4 gap-12 mb-16">
           {/* Brand */}
           <div className="md:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <svg viewBox="0 0 32 32" fill="none" className="w-7 h-7">
-                <path
-                  d="M16 2L28 28H4L16 2Z"
-                  fill="url(#footer-logo-grad)"
-                />
-                <path
-                  d="M16 10L22 24H10L16 10Z"
-                  fill="white"
-                  opacity="0.3"
-                />
-                <defs>
-                  <linearGradient
-                    id="footer-logo-grad"
-                    x1="4"
-                    y1="28"
-                    x2="28"
-                    y2="2"
-                  >
-                    <stop stopColor="#3b82f6" />
-                    <stop offset="1" stopColor="#8b5cf6" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <span className="text-base font-bold tracking-tight">
+            <div className="flex items-center gap-2.5 mb-5">
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                <svg viewBox="0 0 20 20" fill="none" className="w-3.5 h-3.5">
+                  <path d="M10 2L18 18H2L10 2Z" fill="white" opacity="0.9" />
+                  <path d="M10 8L14 16H6L10 8Z" fill="#6366f1" opacity="0.5" />
+                </svg>
+              </div>
+              <span className="text-base font-bold tracking-tight text-white">
                 BANK OF AI
               </span>
             </div>
-            <p className="text-sm text-slate-400 leading-relaxed">
+            <p className="text-sm text-slate-500 leading-relaxed">
               On-chain payments, identities, and DeFi for AI agents.
             </p>
           </div>
 
           {/* Product */}
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-4">
+            <h4 className="text-[11px] font-semibold uppercase tracking-wider text-slate-600 mb-5">
               Product
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-3.5">
               {["x402 Payments", "On-chain Identity", "Asset Management", "OpenClaw Extension"].map(
                 (item) => (
                   <li key={item}>
                     <a
                       href="#"
-                      className="text-sm text-slate-400 hover:text-white transition-colors"
+                      className="text-sm text-slate-500 hover:text-white transition-colors duration-200"
                     >
                       {item}
                     </a>
@@ -65,16 +48,16 @@ export default function Footer() {
 
           {/* Developers */}
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-4">
+            <h4 className="text-[11px] font-semibold uppercase tracking-wider text-slate-600 mb-5">
               Developers
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-3.5">
               {["Documentation", "MCP Servers", "SDK Reference", "API Guide"].map(
                 (item) => (
                   <li key={item}>
                     <a
                       href="#"
-                      className="text-sm text-slate-400 hover:text-white transition-colors"
+                      className="text-sm text-slate-500 hover:text-white transition-colors duration-200"
                     >
                       {item}
                     </a>
@@ -86,15 +69,15 @@ export default function Footer() {
 
           {/* Community */}
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-4">
+            <h4 className="text-[11px] font-semibold uppercase tracking-wider text-slate-600 mb-5">
               Community
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-3.5">
               {["GitHub", "Discord", "Twitter", "Blog"].map((item) => (
                 <li key={item}>
                   <a
                     href="#"
-                    className="text-sm text-slate-400 hover:text-white transition-colors"
+                    className="text-sm text-slate-500 hover:text-white transition-colors duration-200"
                   >
                     {item}
                   </a>
@@ -104,22 +87,22 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="text-sm text-slate-500">
-            © 2026 Bank of AI. All rights reserved.
+        <div className="pt-8 border-t border-white/[0.04] flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="text-sm text-slate-600">
+            © 2025 Bank of AI. All rights reserved.
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <a
               href="#"
-              className="p-2 rounded-lg hover:bg-slate-800 transition-colors"
+              className="p-2.5 rounded-lg hover:bg-white/[0.04] transition-colors duration-200"
             >
-              <Github className="w-4 h-4 text-slate-500 hover:text-white" />
+              <Github className="w-4 h-4 text-slate-600 hover:text-white transition-colors" />
             </a>
             <a
               href="#"
-              className="p-2 rounded-lg hover:bg-slate-800 transition-colors"
+              className="p-2.5 rounded-lg hover:bg-white/[0.04] transition-colors duration-200"
             >
-              <Twitter className="w-4 h-4 text-slate-500 hover:text-white" />
+              <Twitter className="w-4 h-4 text-slate-600 hover:text-white transition-colors" />
             </a>
           </div>
         </div>
