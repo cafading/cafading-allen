@@ -3,966 +3,707 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bank of AI — On-chain Payments, Identities & DeFi for AI Agents</title>
+  <title>BANK OF AI | On-chain payments, identities, and DeFi for AI agents</title>
   <meta name="description" content="On-chain payments, identities, and DeFi for AI agents. Starting with TRON & BNB Chain — expanding to all chains." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --blue-50: #eff6ff; --blue-100: #dbeafe; --blue-200: #bfdbfe; --blue-300: #93c5fd;
-      --blue-400: #60a5fa; --blue-500: #3b82f6; --blue-600: #2563eb; --blue-700: #1d4ed8;
-      --purple-50: #faf5ff; --purple-100: #f3e8ff; --purple-400: #c084fc; --purple-500: #a855f7; --purple-600: #9333ea;
-      --emerald-50: #ecfdf5; --emerald-100: #d1fae5; --emerald-400: #34d399; --emerald-500: #10b981; --emerald-600: #059669;
-      --amber-50: #fffbeb; --amber-100: #fef3c7; --amber-300: #fcd34d; --amber-400: #fbbf24; --amber-500: #f59e0b; --amber-600: #d97706;
-      --red-50: #fef2f2; --red-100: #fee2e2; --red-400: #f87171; --red-500: #ef4444; --red-600: #dc2626;
-      --orange-50: #fff7ed; --orange-100: #ffedd5; --orange-500: #f97316; --orange-600: #ea580c; --orange-700: #c2410c;
-      --cyan-50: #ecfeff; --cyan-700: #0e7490;
-      --indigo-500: #6366f1; --indigo-600: #4f46e5;
-      --violet-500: #8b5cf6;
-      --fuchsia-600: #c026d3;
-      --teal-600: #0d9488;
-      --rose-600: #e11d48;
-      --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b; --slate-700: #334155;
-      --slate-800: #1e293b; --slate-900: #0f172a; --slate-950: #020617;
-      --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb; --gray-400: #9ca3af;
-      --gray-500: #6b7280; --gray-600: #4b5563; --gray-700: #374151; --gray-900: #111827;
-    }
-
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: #171717;
-      background: #fff;
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: #000; background: #fff;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      line-height: 1.5;
+      line-height: 1.6;
     }
+    .mono { font-family: 'DM Mono', monospace; }
+    .display { font-family: 'Instrument Serif', serif; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
 
-    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    /* Layout */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    @media (min-width: 768px) { .container { padding: 0 40px; } }
 
-    /* ======== Animations ======== */
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-    @keyframes float-delayed {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-    @keyframes pulse-glow {
-      0%, 100% { opacity: 0.7; }
-      50% { opacity: 1; }
-    }
-    @keyframes pulse-dot {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-    @keyframes fade-in-up {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-float { animation: float 3s ease-in-out infinite; }
-    .animate-float-delayed { animation: float-delayed 3s ease-in-out 1s infinite; }
-    .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
-    .animate-pulse-dot { animation: pulse-dot 1.5s ease-in-out infinite; }
-    .animate-fade-in-up { animation: fade-in-up 0.6s ease-out both; }
+    /* Animations */
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    @keyframes dash { to { stroke-dashoffset: -20; } }
+    .anim-float { animation: float 3s ease-in-out infinite; }
+    .anim-float-d { animation: float 3s ease-in-out 1.5s infinite; }
+    .anim-pulse { animation: pulse 1.5s ease-in-out infinite; }
+    .anim-dash { animation: dash 1.5s linear infinite; }
 
-    /* ======== Utility ======== */
-    .max-w-7xl { max-width: 80rem; margin-left: auto; margin-right: auto; }
-    .max-w-5xl { max-width: 64rem; margin-left: auto; margin-right: auto; }
-    .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
-
-    .gradient-text {
-      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .card-hover { transition: all 0.3s ease; }
-    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
-
-    .hero-grid {
-      background-image:
-        linear-gradient(rgba(59,130,246,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(59,130,246,0.05) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-
-    .code-block {
-      background: linear-gradient(135deg, #1e1e2e 0%, #2d2d3f 100%);
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-    /* ======== SVG Icon helper ======== */
-    .icon { display: inline-block; vertical-align: middle; }
-    .icon svg { display: block; }
-
-    /* ======== Header ======== */
+    /* ====== HEADER ====== */
     .header {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
-      background: rgba(255,255,255,0.8);
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(243,244,246,0.8);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: #fff; border-bottom: 1px solid #000;
     }
     .header-inner {
-      max-width: 80rem; margin: 0 auto; padding: 0 1.5rem;
-      height: 64px; display: flex; align-items: center; justify-content: space-between;
+      max-width: 1200px; margin: 0 auto; padding: 0 24px;
+      height: 56px; display: flex; align-items: center; justify-content: space-between;
     }
-    .header-logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
-    .header-logo span { font-size: 1.125rem; font-weight: 700; letter-spacing: -0.025em; color: var(--gray-900); }
-    .header-nav { display: flex; align-items: center; gap: 2rem; }
-    .header-nav button {
-      display: flex; align-items: center; gap: 0.25rem;
-      font-size: 0.875rem; font-weight: 500; color: var(--gray-600);
-      background: none; border: none; cursor: pointer; transition: color 0.2s;
+    @media (min-width: 768px) { .header-inner { padding: 0 40px; } }
+    .logo { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; letter-spacing: -0.02em; }
+    .logo-mark { width: 28px; height: 28px; border: 2px solid #000; display: flex; align-items: center; justify-content: center; }
+    .header-nav { display: flex; gap: 24px; }
+    .header-nav a { font-size: 14px; font-weight: 500; color: #000; transition: opacity .2s; }
+    .header-nav a:hover { opacity: .5; }
+    .header-actions { display: flex; gap: 8px; }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border: 1px solid #000; background: #fff;
+      font-size: 13px; font-weight: 500; cursor: pointer; transition: background .2s;
     }
-    .header-nav button:hover { color: var(--gray-900); }
-    .header-right { display: flex; align-items: center; gap: 1rem; }
-    .header-right button {
-      display: flex; align-items: center; gap: 0.375rem;
-      padding: 0.5rem; border-radius: 0.5rem; background: none; border: none;
-      cursor: pointer; transition: background 0.2s; font-size: 0.875rem;
-      font-weight: 500; color: var(--gray-600);
+    .btn-outline:hover { background: #f5f5f5; }
+    .btn-fill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border: 1px solid #000; background: #000; color: #fff;
+      font-size: 13px; font-weight: 500; cursor: pointer; transition: background .2s;
     }
-    .header-right button:hover { background: var(--gray-100); }
-    .mobile-toggle { display: none; padding: 0.5rem; background: none; border: none; cursor: pointer; }
-    .mobile-toggle span { display: block; width: 20px; height: 2px; background: var(--gray-900); margin: 4px 0; transition: all 0.3s; }
-
+    .btn-fill:hover { background: #333; }
     @media (max-width: 768px) {
-      .header-nav, .header-right { display: none; }
-      .mobile-toggle { display: block; }
+      .header-nav, .header-actions { display: none; }
     }
 
-    /* ======== Hero ======== */
-    .hero {
-      position: relative; padding-top: 64px; overflow: hidden;
+    /* ====== HERO ====== */
+    .hero { padding: 96px 0 0; border-bottom: 1px solid #000; }
+    .hero-inner { display: flex; flex-direction: column; gap: 40px; }
+    @media (min-width: 1024px) {
+      .hero-inner { flex-direction: row; align-items: flex-start; gap: 60px; }
     }
-    .hero-bg {
-      position: absolute; inset: 0;
-      background: linear-gradient(to bottom, var(--slate-950), var(--slate-900), var(--slate-950));
-    }
-    .hero-grid-overlay { position: absolute; inset: 0; opacity: 0.3; }
-    .hero-glow {
-      position: absolute; border-radius: 50%; filter: blur(60px);
-    }
-    .hero-shape {
-      position: absolute; opacity: 0.3;
-    }
-    .hero-content {
-      position: relative; max-width: 80rem; margin: 0 auto;
-      padding: 7rem 1.5rem 7rem; text-align: center;
-    }
-    @media (min-width: 768px) { .hero-content { padding: 10rem 1.5rem 10rem; } }
+    .hero-left { flex: 1; padding-bottom: 60px; }
     .hero-badge {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.375rem 1rem; border-radius: 9999px;
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-      font-size: 0.875rem; color: var(--blue-300); margin-bottom: 2rem;
-      backdrop-filter: blur(4px);
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 500; margin-bottom: 24px;
     }
-    .hero-badge .dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--emerald-400); animation: pulse-dot 1.5s ease-in-out infinite;
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #000; animation: pulse 1.5s ease-in-out infinite; }
+    .hero-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 48px; line-height: 1.05; letter-spacing: -0.03em;
+      margin-bottom: 20px;
     }
-    .hero h1 {
-      font-size: 3rem; font-weight: 800; letter-spacing: -0.025em;
-      color: #fff; margin-bottom: 1.5rem; line-height: 1.1;
+    @media (min-width: 768px) { .hero-title { font-size: 72px; } }
+    .hero-title em { font-style: italic; }
+    .hero-desc { font-size: 16px; font-weight: 500; color: #444; line-height: 1.7; max-width: 560px; margin-bottom: 28px; }
+    .hero-desc strong { color: #000; font-weight: 600; }
+    .hero-code {
+      border-top: 6px solid #000; border: 1px solid #000; border-top-width: 6px;
+      background: #fff; margin-bottom: 32px;
     }
-    @media (min-width: 768px) { .hero h1 { font-size: 4.5rem; } }
-    @media (min-width: 1024px) { .hero h1 { font-size: 6rem; } }
-    .hero h1 .ai-text { position: relative; display: inline-block; }
-    .hero-subtitle {
-      max-width: 42rem; margin: 0 auto; font-size: 1.125rem;
-      color: var(--slate-400); margin-bottom: 3rem; line-height: 1.7;
+    .hero-code-header { padding: 12px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #eee; }
+    .hero-code-header svg { width: 18px; height: 18px; }
+    .hero-code-header span { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; }
+    .hero-code-body {
+      padding: 16px; background: #f5f5f5;
+      font-family: 'DM Mono', monospace; font-size: 13px; line-height: 1.7;
+      color: #000; overflow-x: auto; white-space: pre; letter-spacing: -0.03em;
     }
-    @media (min-width: 768px) { .hero-subtitle { font-size: 1.25rem; } }
-    .hero-subtitle .tron { color: var(--red-400); font-weight: 500; }
-    .hero-subtitle .bnb { color: var(--amber-400); font-weight: 500; }
-    .hero-ctas {
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center; gap: 1rem;
+    .hero-code-footer { padding: 12px 16px; font-family: 'DM Mono', monospace; font-size: 12px; color: #666; }
+    .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+    .hero-right { flex-shrink: 0; display: none; position: relative; width: 420px; }
+    @media (min-width: 1024px) { .hero-right { display: block; } }
+    .hero-visual {
+      width: 100%; aspect-ratio: 1; border: 1px solid #000;
+      background: #fafafa; position: relative; overflow: hidden;
     }
-    @media (min-width: 640px) { .hero-ctas { flex-direction: row; } }
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 0.625rem;
-      padding: 0.875rem 1.75rem; background: linear-gradient(to right, var(--blue-500), var(--blue-600));
-      color: #fff; border-radius: 0.75rem; font-weight: 500; font-size: 0.875rem;
-      text-decoration: none; border: none; cursor: pointer;
-      box-shadow: 0 10px 25px rgba(59,130,246,0.25); transition: all 0.3s;
-    }
-    .btn-primary:hover {
-      background: linear-gradient(to right, var(--blue-600), var(--blue-700));
-      box-shadow: 0 10px 25px rgba(59,130,246,0.4);
-    }
-    .btn-secondary {
-      display: inline-flex; align-items: center; gap: 0.625rem;
-      padding: 0.875rem 1.75rem;
-      background: rgba(255,255,255,0.05); color: #fff;
-      border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem;
-      font-weight: 500; font-size: 0.875rem; text-decoration: none;
-      backdrop-filter: blur(4px); transition: all 0.3s; cursor: pointer;
-    }
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.1);
-      border-color: rgba(255,255,255,0.2);
-    }
-    .hero-chains {
-      display: flex; align-items: center; justify-content: center;
-      gap: 2rem; margin-top: 4rem; opacity: 0.5;
-    }
-    .chain-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--slate-500); }
-    .chain-icon {
-      width: 24px; height: 24px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 10px; font-weight: 700;
-    }
-    .chain-divider { width: 1px; height: 16px; background: var(--slate-700); }
-    .hero-fade {
-      position: absolute; bottom: 0; left: 0; right: 0; height: 6rem;
-      background: linear-gradient(to top, #fff, transparent);
-    }
+    .hero-visual-inner { padding: 32px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
 
-    /* ======== Feature Sections ======== */
-    .feature-section { padding: 6rem 1.5rem; }
-    .feature-section.alt { background: rgba(249,250,251,0.5); }
+    /* Stats bar */
+    .stats { border-bottom: 1px solid #000; padding: 32px 0; }
+    .stats-inner { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px; }
+    @media (min-width: 768px) { .stats-inner { gap: 48px; } }
+    .stat-num {
+      font-family: 'Instrument Serif', serif;
+      font-size: 32px; line-height: 1; letter-spacing: -0.04em; color: #000;
+    }
+    @media (min-width: 768px) { .stat-num { font-size: 48px; } }
+    .stat-label { font-size: 12px; font-weight: 500; color: #999; margin-top: 4px; }
+
+    /* ====== FEATURE SECTIONS ====== */
+    .feature { padding: 80px 0; border-bottom: 1px solid #e5e5e5; }
+    .feature.alt { background: #fafafa; }
     .feature-grid {
-      max-width: 80rem; margin: 0 auto;
-      display: grid; grid-template-columns: 1fr; gap: 4rem; align-items: center;
+      display: grid; grid-template-columns: 1fr; gap: 48px; align-items: center;
     }
-    @media (min-width: 768px) { .feature-grid { grid-template-columns: 1fr 1fr; } }
-    .feature-label {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      font-size: 0.875rem; color: var(--blue-500); margin-bottom: 1rem;
-      font-family: 'JetBrains Mono', monospace;
+    @media (min-width: 768px) { .feature-grid { grid-template-columns: 1fr 1fr; gap: 64px; } }
+    .feature-num {
+      font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500;
+      color: #999; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
     }
-    .feature-label .line { width: 1.5rem; height: 1px; background: var(--blue-500); }
-    .feature-title {
-      font-size: 1.875rem; font-weight: 700; color: var(--gray-900);
-      margin-bottom: 1rem; line-height: 1.2;
+    .feature-num::before { content: ''; width: 20px; height: 1px; background: #ccc; }
+    .feature-title { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 12px; }
+    @media (min-width: 768px) { .feature-title { font-size: 36px; } }
+    .feature-desc { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 24px; }
+    .feature-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 12px; border: 1px solid #ddd; font-size: 13px; font-weight: 500;
+      background: #fff;
     }
-    @media (min-width: 768px) { .feature-title { font-size: 2.25rem; } }
-    .feature-desc {
-      color: var(--gray-500); font-size: 1.125rem; line-height: 1.7;
-      margin-bottom: 2rem;
-    }
-    .feature-tags { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-    .feature-tag {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.5rem 1rem; border-radius: 0.5rem;
-      background: var(--gray-50); border: 1px solid var(--gray-100);
-      font-size: 0.875rem; font-weight: 500; color: var(--gray-700);
-    }
-    .feature-tag svg { width: 16px; height: 16px; color: var(--blue-500); }
-    .feature-tag.purple svg { color: var(--purple-500); }
-    .feature-tag.indigo svg { color: var(--indigo-500); }
-    .feature-tag.white { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .tag svg { width: 14px; height: 14px; }
 
-    /* Protocol tags */
-    .protocol-tags { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-    .protocol-tag {
-      display: inline-flex; align-items: center; gap: 0.375rem;
-      padding: 0.375rem 0.75rem; border-radius: 9999px;
-      font-size: 0.75rem; font-weight: 600; border: 1px solid;
-    }
-    .protocol-tag .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.5; }
-    .protocol-tag.blue { background: var(--blue-50); color: var(--blue-700); border-color: var(--blue-100); }
-    .protocol-tag.orange { background: var(--orange-50); color: var(--orange-700); border-color: var(--orange-100); }
-    .protocol-tag.cyan { background: var(--cyan-50); color: var(--cyan-700); border-color: rgba(14,116,144,0.2); }
-    .protocol-tag.purple { background: var(--purple-50); color: #7c3aed; border-color: var(--purple-100); }
-
-    /* ======== Feature Illustrations ======== */
-    .illustration-wrapper { position: relative; }
-    .illustration-glow {
-      position: absolute; inset: -1rem; border-radius: 1.5rem; filter: blur(40px);
+    /* Feature illustrations — x402 style: bordered, geometric, monochrome with minimal accents */
+    .illust {
+      border: 1px solid #000; background: #fff; position: relative; overflow: hidden;
     }
 
     /* Code block illustration */
-    .code-illustration { position: relative; }
-    .code-tabs {
-      display: flex; align-items: center; background: #1a1a2e; padding: 0.75rem 1rem 0;
-      border-radius: 1rem 1rem 0 0;
+    .code-illust-header {
+      display: flex; gap: 0; border-bottom: 1px solid #e5e5e5;
     }
-    .code-tab {
-      padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 500;
-      background: none; border: none; cursor: pointer; display: flex;
-      align-items: center; gap: 0.5rem; transition: color 0.2s;
+    .code-tab-item {
+      padding: 10px 16px; font-family: 'DM Mono', monospace; font-size: 12px;
+      font-weight: 500; border-right: 1px solid #e5e5e5; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
     }
-    .code-tab.active {
-      color: #fff; background: #2d2d3f; border-radius: 0.5rem 0.5rem 0 0;
-      border-top: 1px solid rgba(255,255,255,0.05);
-      border-left: 1px solid rgba(255,255,255,0.05);
-      border-right: 1px solid rgba(255,255,255,0.05);
+    .code-tab-item.active { background: #000; color: #fff; }
+    .code-tab-item .dot { width: 6px; height: 6px; border-radius: 50%; }
+    .code-content {
+      padding: 20px; font-family: 'DM Mono', monospace; font-size: 13px;
+      line-height: 1.8; background: #fafafa; color: #000; letter-spacing: -0.02em;
     }
-    .code-tab.inactive { color: var(--slate-500); }
-    .code-tab .dot { width: 8px; height: 8px; border-radius: 50%; }
-    .code-body {
-      padding: 1.5rem; font-family: 'JetBrains Mono', monospace;
-      font-size: 0.875rem; line-height: 1.85; color: #e2e8f0;
-      background: linear-gradient(135deg, #1e1e2e, #2d2d3f);
-      border-radius: 0 0 1rem 1rem;
-      border: 1px solid rgba(255,255,255,0.08); border-top: none;
+    .code-content .kw { color: #8250df; }
+    .code-content .str { color: #0a3069; }
+    .code-content .fn { color: #0550ae; }
+    .code-content .num { color: #0550ae; }
+    .code-content .cm { color: #999; }
+    .code-content .indent { padding-left: 20px; }
+    .code-result {
+      padding: 12px 20px; border-top: 1px solid #e5e5e5;
+      font-family: 'DM Mono', monospace; font-size: 12px; color: #1a7f37;
+      display: flex; align-items: center; gap: 8px;
     }
-    .code-body .kw { color: var(--purple-400); }
-    .code-body .br { color: var(--amber-300); }
-    .code-body .fn { color: var(--blue-300); }
-    .code-body .str { color: #34d399; }
-    .code-body .num { color: var(--amber-300); }
-    .code-body .op { color: var(--slate-400); }
-    .code-body .indent { padding-left: 1.5rem; }
-    .code-body .result {
-      margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem;
-      font-size: 0.75rem; color: rgba(52,211,153,0.7);
-    }
-    .code-body .result .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--emerald-400); }
+    .code-result .dot { width: 6px; height: 6px; border-radius: 50%; background: #1a7f37; }
 
-    /* Floating badge */
-    .floating-badge {
-      position: absolute; background: #fff; border-radius: 0.75rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 0.5rem 0.75rem;
-      display: flex; align-items: center; gap: 0.5rem;
-      border: 1px solid var(--gray-100);
-    }
-    .floating-badge .badge-icon {
-      width: 24px; height: 24px; border-radius: 50%;
+    /* Identity card illustration */
+    .id-card { padding: 24px; }
+    .id-card-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+    .id-avatar {
+      width: 48px; height: 48px; border: 2px solid #000;
       display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem;
     }
-    .floating-badge .badge-text { font-size: 0.75rem; }
-    .floating-badge .badge-text strong { display: block; font-weight: 600; color: var(--gray-900); }
-    .floating-badge .badge-text small { color: var(--gray-400); }
+    .id-name { font-size: 16px; font-weight: 700; }
+    .id-verified {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 600; color: #1a7f37; margin-top: 4px;
+      border: 1px solid #1a7f37; padding: 2px 8px;
+    }
+    .id-verified .dot { width: 5px; height: 5px; border-radius: 50%; background: #1a7f37; }
+    .addr-row {
+      display: flex; align-items: center; gap: 12px; padding: 12px;
+      border: 1px solid #e5e5e5; margin-bottom: 8px;
+    }
+    .addr-icon {
+      width: 32px; height: 32px; border: 1px solid #000;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+    }
+    .addr-label { font-size: 10px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.05em; }
+    .addr-val { font-family: 'DM Mono', monospace; font-size: 12px; color: #333; }
+    .id-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 16px; border-top: 1px solid #e5e5e5; margin-top: 16px;
+    }
+    .id-footer span { font-family: 'DM Mono', monospace; font-size: 11px; color: #999; }
 
-    /* Identity card */
-    .identity-card {
-      background: #fff; border-radius: 1rem; box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-      border: 1px solid var(--gray-100); padding: 1.5rem; position: relative; overflow: hidden;
+    /* Asset dashboard illustration */
+    .asset-header-row {
+      padding: 20px 24px; border-bottom: 1px solid #e5e5e5;
+      display: flex; justify-content: space-between; align-items: center;
     }
-    .identity-card .corner {
-      position: absolute; top: 0; right: 0; width: 8rem; height: 8rem;
-      background: linear-gradient(to bottom-left, var(--purple-50), transparent);
-      border-bottom-left-radius: 100%;
+    .asset-val-label { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.05em; }
+    .asset-val-num { font-family: 'Instrument Serif', serif; font-size: 28px; letter-spacing: -0.03em; }
+    .asset-change-badge {
+      font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500;
+      padding: 4px 10px; border: 1px solid #1a7f37; color: #1a7f37;
     }
-    .identity-header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem; }
-    .identity-avatar {
-      width: 3.5rem; height: 3.5rem; border-radius: 1rem;
-      background: linear-gradient(to bottom-right, var(--purple-500), var(--blue-600));
+    .asset-change-badge.down { border-color: #cf222e; color: #cf222e; }
+    .asset-chart-area { padding: 16px 24px; border-bottom: 1px solid #e5e5e5; }
+    .asset-list { padding: 8px 24px 16px; }
+    .asset-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+    }
+    .asset-row:last-child { border-bottom: none; }
+    .asset-row-left { display: flex; align-items: center; gap: 10px; }
+    .asset-icon-sq {
+      width: 28px; height: 28px; border: 1px solid #000;
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 8px 20px rgba(168,85,247,0.2);
+      font-size: 11px; font-weight: 700;
     }
-    .identity-name { font-size: 1.125rem; font-weight: 700; color: var(--gray-900); }
-    .verified-badge {
-      display: inline-flex; align-items: center; gap: 0.25rem;
-      font-size: 0.75rem; color: var(--emerald-600); background: var(--emerald-50);
-      padding: 0.125rem 0.5rem; border-radius: 9999px; font-weight: 500; margin-top: 0.25rem;
-    }
-    .verified-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--emerald-500); }
-    .address-row {
-      display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem;
-      border-radius: 0.75rem; background: var(--gray-50); border: 1px solid var(--gray-100);
-      margin-bottom: 0.75rem;
-    }
-    .address-icon {
-      width: 2rem; height: 2rem; border-radius: 0.5rem;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
-    }
-    .address-label { font-size: 10px; color: var(--gray-400); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
-    .address-value { font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--gray-700); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .identity-footer {
-      margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--gray-100);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .identity-footer .standard { font-size: 0.75rem; color: var(--gray-400); }
-    .identity-footer .dots { display: flex; gap: 0.25rem; }
-    .identity-footer .dots span { width: 8px; height: 8px; border-radius: 50%; }
+    .asset-name { font-size: 13px; font-weight: 600; }
+    .asset-chain { font-size: 10px; color: #999; }
+    .asset-row-right { text-align: right; }
+    .asset-amt { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; }
+    .asset-pct { font-family: 'DM Mono', monospace; font-size: 11px; }
+    .asset-pct.up { color: #1a7f37; }
+    .asset-pct.down { color: #cf222e; }
 
-    /* Asset dashboard */
-    .asset-dashboard {
-      background: #fff; border-radius: 1rem; box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-      border: 1px solid var(--gray-100); overflow: hidden; position: relative;
+    /* Diagram illustration */
+    .diagram-wrap { padding: 24px; display: flex; justify-content: center; }
+    .diagram-box { width: 380px; height: 300px; position: relative; }
+    .d-node {
+      position: absolute; border: 1px solid #000; background: #fff;
+      padding: 10px; text-align: center; width: 100px; transition: background .2s;
     }
-    .asset-header { padding: 1.25rem; border-bottom: 1px solid var(--gray-100); display: flex; align-items: center; justify-content: space-between; }
-    .asset-header .label { font-size: 0.75rem; color: var(--gray-400); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
-    .asset-header .value { font-size: 1.5rem; font-weight: 700; color: var(--gray-900); }
-    .asset-change {
-      display: inline-flex; align-items: center; gap: 0.25rem;
-      padding: 0.25rem 0.625rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;
-    }
-    .asset-change.up { background: var(--emerald-50); color: var(--emerald-600); }
-    .asset-change.down { background: var(--red-50); color: var(--red-600); }
-    .asset-chart { padding: 1rem 1.25rem; border-bottom: 1px solid var(--gray-100); }
-    .asset-list { padding: 1.25rem; }
-    .asset-item {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.75rem; border-radius: 0.75rem; transition: background 0.2s;
-      margin-bottom: 0.5rem;
-    }
-    .asset-item:hover { background: var(--gray-50); }
-    .asset-item-left { display: flex; align-items: center; gap: 0.75rem; }
-    .asset-icon {
-      width: 2rem; height: 2rem; border-radius: 0.5rem;
+    .d-node:hover { background: #f5f5f5; }
+    .d-node-icon {
+      width: 32px; height: 32px; border: 1px solid #000; margin: 0 auto 6px;
       display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 0.75rem; font-weight: 700;
     }
-    .asset-item-name { font-size: 0.875rem; font-weight: 600; color: var(--gray-900); }
-    .asset-item-chain { font-size: 10px; color: var(--gray-400); }
-    .asset-item-right { text-align: right; }
-    .asset-item-amount { font-size: 0.875rem; font-weight: 500; color: var(--gray-900); }
-    .asset-item-change { font-size: 10px; font-weight: 500; display: flex; align-items: center; gap: 2px; justify-content: flex-end; }
+    .d-node-name { font-size: 11px; font-weight: 700; }
+    .d-node-sub { font-size: 9px; color: #999; }
+    .d-node.center {
+      width: 120px; background: #000; color: #fff;
+      left: 50%; top: 50%; transform: translate(-50%, -50%);
+    }
+    .d-node.center .d-node-icon { border-color: #fff; }
+    .d-node.center .d-node-sub { color: #888; }
+    .d-node.tl { left: 0; top: 0; }
+    .d-node.tr { right: 0; top: 0; }
+    .d-node.bl { left: 0; bottom: 0; }
+    .d-node.br { right: 0; bottom: 0; }
 
-    /* OpenClaw diagram */
-    .diagram-container { display: flex; align-items: center; justify-content: center; }
-    .diagram { width: 400px; height: 320px; position: relative; }
-    .diagram-node {
-      position: absolute; width: 7rem;
-      background: #fff; border-radius: 1rem; box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-      border: 1px solid var(--gray-100); padding: 0.75rem; text-align: center;
-      transition: all 0.3s;
+    /* ====== MCP SERVERS ====== */
+    .mcp { padding: 80px 0; border-bottom: 1px solid #e5e5e5; }
+    .section-header { margin-bottom: 48px; }
+    .section-header h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 36px; letter-spacing: -0.03em; margin-bottom: 8px;
     }
-    .diagram-node:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(0,0,0,0.12); }
-    .diagram-node.center {
-      width: 9rem; left: 50%; top: 50%; transform: translate(-50%, -50%);
-      background: linear-gradient(to bottom-right, var(--blue-500), var(--indigo-600));
-      border: none; box-shadow: 0 15px 40px rgba(99,102,241,0.3);
-    }
-    .diagram-node.center:hover { transform: translate(-50%, -52%); }
-    .diagram-node.tl { left: 0; top: 0; }
-    .diagram-node.tr { right: 0; top: 0; }
-    .diagram-node.bl { left: 0; bottom: 0; }
-    .diagram-node.br { right: 0; bottom: 0; }
-    .node-icon {
-      width: 2.5rem; height: 2.5rem; border-radius: 0.75rem;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 0.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .node-icon.center-icon {
-      width: 3rem; height: 3rem; background: rgba(255,255,255,0.2);
-      backdrop-filter: blur(4px); margin-bottom: 0.5rem;
-    }
-    .node-name { font-size: 0.75rem; font-weight: 700; color: var(--gray-900); }
-    .node-sub { font-size: 9px; color: var(--gray-400); }
-    .center .node-name { color: #fff; }
-    .center .node-sub { color: rgba(191,219,254,0.8); }
-
-    /* ======== MCP Servers ======== */
-    .mcp-section { padding: 6rem 1.5rem; }
-    .mcp-section .section-header { text-align: center; margin-bottom: 4rem; }
-    .mcp-section .section-title { font-size: 1.875rem; font-weight: 700; color: var(--gray-900); margin-bottom: 1rem; }
-    @media (min-width: 768px) { .mcp-section .section-title { font-size: 2.25rem; } }
-    .mcp-section .section-desc { color: var(--gray-500); font-size: 1.125rem; max-width: 42rem; margin: 0 auto; }
-    .mcp-grid {
-      max-width: 80rem; margin: 0 auto;
-      display: grid; grid-template-columns: 1fr; gap: 1.5rem;
-    }
+    @media (min-width: 768px) { .section-header h2 { font-size: 48px; } }
+    .section-header p { font-size: 15px; color: #555; max-width: 560px; }
+    .section-header.center { text-align: center; }
+    .section-header.center p { margin: 0 auto; }
+    .mcp-grid { display: grid; grid-template-columns: 1fr; gap: 0; }
     @media (min-width: 768px) { .mcp-grid { grid-template-columns: 1fr 1fr; } }
     .mcp-card {
-      background: #fff; border-radius: 1rem; border: 1px solid var(--gray-100);
-      padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-      transition: all 0.3s;
+      border: 1px solid #000; padding: 24px; margin: -0.5px;
+      transition: background .2s;
     }
-    .mcp-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
-    .mcp-card-header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
-    .mcp-card-icon {
-      width: 3rem; height: 3rem; border-radius: 1rem;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .mcp-card-name { font-size: 1.125rem; font-weight: 700; color: var(--gray-900); transition: color 0.2s; }
-    .mcp-card:hover .mcp-card-name { color: var(--blue-600); }
-    .mcp-card-desc { font-size: 0.875rem; color: var(--gray-500); margin-top: 0.25rem; line-height: 1.6; }
-    .mcp-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem; }
-    .mcp-tag { padding: 0.25rem 0.625rem; border-radius: 0.375rem; font-size: 11px; font-weight: 600; }
-    .mcp-card-footer {
-      display: flex; align-items: center; gap: 1rem;
-      padding-top: 1rem; border-top: 1px solid var(--gray-100);
-    }
-    .mcp-card-footer a {
-      display: flex; align-items: center; gap: 0.375rem;
-      font-size: 0.75rem; font-weight: 500; color: var(--gray-500);
-      text-decoration: none; transition: color 0.2s;
-    }
-    .mcp-card-footer a:hover { color: var(--gray-900); }
-    .mcp-card-footer a.external { margin-left: auto; }
-    .mcp-card-footer a.external:hover { color: var(--blue-600); }
-
-    /* ======== Live Demo ======== */
-    .demo-section { padding: 6rem 1.5rem; background: rgba(249,250,251,0.5); }
-    .demo-section .section-header { text-align: center; margin-bottom: 4rem; }
-    .demo-badge {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.375rem 1rem; border-radius: 9999px;
-      background: var(--blue-50); font-size: 0.875rem; color: var(--blue-600);
-      font-weight: 500; margin-bottom: 1rem;
-    }
-    .demo-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-500); animation: pulse-dot 1.5s ease-in-out infinite; }
-    .demo-grid {
-      max-width: 64rem; margin: 0 auto;
-      display: grid; grid-template-columns: 1fr; gap: 2rem;
-    }
-    @media (min-width: 768px) { .demo-grid { grid-template-columns: 1fr 1fr; } }
-
-    .chat-window {
-      background: #fff; border-radius: 1rem; box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-      border: 1px solid var(--gray-100); overflow: hidden;
-      display: flex; flex-direction: column;
-    }
-    .chat-header {
-      padding: 1rem 1.25rem; border-bottom: 1px solid var(--gray-100);
-      display: flex; align-items: center; gap: 0.75rem;
-    }
-    .chat-avatar {
-      width: 2.5rem; height: 2.5rem; border-radius: 0.75rem;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .chat-title { font-size: 0.875rem; font-weight: 700; color: var(--gray-900); }
-    .chat-subtitle { font-size: 10px; color: var(--gray-400); }
-    .chat-status {
-      margin-left: auto; display: flex; align-items: center; gap: 0.25rem;
-    }
-    .chat-status .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--emerald-400); animation: pulse-dot 1.5s ease-in-out infinite; }
-    .chat-status span { font-size: 10px; color: var(--emerald-600); font-weight: 500; }
-    .chat-messages { padding: 1rem; flex: 1; max-height: 360px; overflow-y: auto; }
-    .chat-msg { display: flex; align-items: flex-start; gap: 0.625rem; margin-bottom: 0.75rem; }
-    .chat-msg.user { flex-direction: row-reverse; }
-    .msg-avatar {
-      width: 1.5rem; height: 1.5rem; border-radius: 50%;
+    .mcp-card:hover { background: #fafafa; }
+    .mcp-card-top { display: flex; gap: 16px; margin-bottom: 16px; }
+    .mcp-icon {
+      width: 40px; height: 40px; border: 2px solid #000;
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
-    .msg-avatar.user-av { background: var(--blue-100); }
-    .msg-avatar.agent-av { background: var(--gray-100); }
-    .msg-bubble {
-      max-width: 80%; padding: 0.625rem 0.875rem;
-      border-radius: 1rem; font-size: 0.75rem; line-height: 1.6;
+    .mcp-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .mcp-desc { font-size: 13px; color: #555; line-height: 1.6; }
+    .mcp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .mcp-tag {
+      font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
+      padding: 3px 8px; border: 1px solid #ddd;
+    }
+    .mcp-links { display: flex; gap: 16px; padding-top: 12px; border-top: 1px solid #e5e5e5; }
+    .mcp-links a {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 12px; font-weight: 500; color: #666; transition: color .2s;
+    }
+    .mcp-links a:hover { color: #000; }
+    .mcp-links a svg { width: 14px; height: 14px; }
+
+    /* ====== LIVE DEMO ====== */
+    .demo { padding: 80px 0; background: #fafafa; border-bottom: 1px solid #e5e5e5; }
+    .demo-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500;
+      padding: 4px 12px; border: 1px solid #000; margin-bottom: 16px;
+    }
+    .demo-grid { display: grid; grid-template-columns: 1fr; gap: 0; max-width: 960px; margin: 0 auto; }
+    @media (min-width: 768px) { .demo-grid { grid-template-columns: 1fr 1fr; } }
+    .chat { border: 1px solid #000; margin: -0.5px; display: flex; flex-direction: column; }
+    .chat-hd {
+      padding: 12px 16px; border-bottom: 1px solid #e5e5e5;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .chat-avatar-sq {
+      width: 32px; height: 32px; border: 1px solid #000;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .chat-hd-title { font-size: 13px; font-weight: 700; }
+    .chat-hd-sub { font-size: 10px; color: #999; }
+    .chat-status { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+    .chat-status .dot { width: 6px; height: 6px; border-radius: 50%; background: #1a7f37; animation: pulse 1.5s ease-in-out infinite; }
+    .chat-status span { font-family: 'DM Mono', monospace; font-size: 10px; color: #1a7f37; font-weight: 500; }
+    .chat-body { padding: 16px; flex: 1; max-height: 360px; overflow-y: auto; }
+    .msg { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; }
+    .msg.user { flex-direction: row-reverse; }
+    .msg-av {
+      width: 20px; height: 20px; border: 1px solid #ccc;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      font-size: 9px; font-weight: 700;
+    }
+    .msg.user .msg-av { background: #000; color: #fff; border-color: #000; }
+    .msg-text {
+      max-width: 80%; padding: 8px 12px; font-size: 12px; line-height: 1.6;
       white-space: pre-line;
     }
-    .msg-bubble.user-msg {
-      background: var(--blue-500); color: #fff;
-      border-bottom-right-radius: 0.25rem;
+    .msg.user .msg-text { background: #000; color: #fff; }
+    .msg-text.action { border: 1px solid #1a7f37; color: #1a7f37; }
+    .msg-text.status { border: 1px solid #bf8700; color: #9a6700; }
+    .msg-text.info { border: 1px solid #ddd; color: #333; }
+    .chat-input-area { padding: 12px 16px; border-top: 1px solid #e5e5e5; }
+    .chat-input-row {
+      display: flex; align-items: center; gap: 8px;
+      border: 1px solid #ddd; padding: 8px 12px;
     }
-    .msg-bubble.action {
-      background: var(--emerald-50); color: var(--emerald-600);
-      border: 1px solid var(--emerald-100); border-bottom-left-radius: 0.25rem;
+    .chat-input-row input {
+      flex: 1; border: none; outline: none; font-size: 13px; font-family: inherit;
+      background: transparent;
     }
-    .msg-bubble.status {
-      background: var(--amber-50); color: #b45309;
-      border: 1px solid var(--amber-100); border-bottom-left-radius: 0.25rem;
-    }
-    .msg-bubble.info {
-      background: var(--gray-50); color: var(--gray-700);
-      border: 1px solid var(--gray-100); border-bottom-left-radius: 0.25rem;
-    }
-    .chat-input {
-      padding: 1rem; border-top: 1px solid var(--gray-100);
-    }
-    .chat-input-inner {
-      display: flex; align-items: center; gap: 0.5rem;
-      background: var(--gray-50); border-radius: 0.75rem;
-      padding: 0.625rem 1rem; border: 1px solid var(--gray-100);
-    }
-    .chat-input-inner input {
-      flex: 1; background: transparent; border: none; outline: none;
-      font-size: 0.875rem; color: var(--gray-700); font-family: inherit;
-    }
-    .chat-input-inner input::placeholder { color: var(--gray-400); }
-    .send-btn {
-      width: 2rem; height: 2rem; border-radius: 0.5rem;
-      background: var(--blue-500); border: none; cursor: pointer;
+    .chat-send {
+      width: 28px; height: 28px; background: #000; border: none; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s;
     }
-    .send-btn:hover { background: var(--blue-600); }
 
-    /* ======== Footer ======== */
-    .footer { background: var(--slate-950); color: #fff; }
-    .footer-inner { max-width: 80rem; margin: 0 auto; padding: 4rem 1.5rem; }
-    .footer-grid {
-      display: grid; grid-template-columns: 1fr; gap: 3rem; margin-bottom: 3rem;
-    }
+    /* ====== FOOTER ====== */
+    .footer { background: #000; color: #fff; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; padding: 60px 40px 40px; }
+    .footer-grid { display: grid; grid-template-columns: 1fr; gap: 40px; margin-bottom: 40px; }
     @media (min-width: 768px) { .footer-grid { grid-template-columns: 1.5fr 1fr 1fr 1fr; } }
-    .footer-brand .logo { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
-    .footer-brand .logo span { font-size: 1rem; font-weight: 700; letter-spacing: -0.025em; }
-    .footer-brand p { font-size: 0.875rem; color: var(--slate-400); line-height: 1.6; }
-    .footer-col h4 {
-      font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
-      letter-spacing: 0.05em; color: var(--slate-500); margin-bottom: 1rem;
-    }
-    .footer-col ul { list-style: none; }
-    .footer-col li { margin-bottom: 0.75rem; }
-    .footer-col a { font-size: 0.875rem; color: var(--slate-400); text-decoration: none; transition: color 0.2s; }
+    .footer-brand .logo-f { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .footer-brand .logo-f .mark { width: 24px; height: 24px; border: 1.5px solid #fff; display: flex; align-items: center; justify-content: center; }
+    .footer-brand .logo-f span { font-size: 14px; font-weight: 700; letter-spacing: -0.02em; }
+    .footer-brand p { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.6; }
+    .footer-col h4 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(255,255,255,0.3); margin-bottom: 16px; }
+    .footer-col li { margin-bottom: 10px; }
+    .footer-col a { font-size: 13px; color: rgba(255,255,255,0.5); transition: color .2s; }
     .footer-col a:hover { color: #fff; }
     .footer-bottom {
-      padding-top: 2rem; border-top: 1px solid var(--slate-800);
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: space-between; gap: 1rem;
+      padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;
     }
-    @media (min-width: 768px) { .footer-bottom { flex-direction: row; } }
-    .footer-bottom .copy { font-size: 0.875rem; color: var(--slate-500); }
-    .footer-socials { display: flex; gap: 1rem; }
-    .footer-socials a {
-      padding: 0.5rem; border-radius: 0.5rem; transition: background 0.2s;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .footer-socials a:hover { background: var(--slate-800); }
-    .footer-socials svg { width: 16px; height: 16px; color: var(--slate-500); }
-    .footer-socials a:hover svg { color: #fff; }
+    .footer-bottom .copy { font-size: 12px; color: rgba(255,255,255,0.3); }
+    .footer-socials { display: flex; gap: 12px; }
+    .footer-socials a { display: flex; padding: 6px; transition: opacity .2s; }
+    .footer-socials a:hover { opacity: .6; }
+    .footer-socials svg { width: 16px; height: 16px; color: rgba(255,255,255,0.5); }
 
-    /* ======== Inline SVG icon sizes ======== */
-    .i-sm { width: 14px; height: 14px; }
-    .i-md { width: 16px; height: 16px; }
-    .i-lg { width: 18px; height: 18px; }
-    .i-xl { width: 20px; height: 20px; }
-    .i-2xl { width: 24px; height: 24px; }
-    .i-3xl { width: 28px; height: 28px; }
+    /* Floating labels */
+    .float-label {
+      position: absolute; background: #fff; border: 1px solid #000;
+      padding: 6px 10px; display: flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 600; z-index: 2;
+    }
+    .float-label .ico { width: 18px; height: 18px; border: 1px solid #000; display: flex; align-items: center; justify-content: center; font-size: 9px; }
+
+    /* SVG icon helper */
+    .i { display: inline-block; vertical-align: middle; }
   </style>
 </head>
 <body>
 
-<!-- ==================== HEADER ==================== -->
+<!-- HEADER -->
 <header class="header">
   <div class="header-inner">
-    <a href="#" class="header-logo">
-      <svg viewBox="0 0 32 32" fill="none" width="32" height="32">
-        <path d="M16 2L28 28H4L16 2Z" fill="url(#lg1)" stroke="#1e293b" stroke-width="1"/>
-        <path d="M16 10L22 24H10L16 10Z" fill="white" opacity="0.6"/>
-        <defs><linearGradient id="lg1" x1="4" y1="28" x2="28" y2="2"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
-      </svg>
-      <span>BANK OF AI</span>
+    <a href="#" class="logo">
+      <div class="logo-mark">
+        <svg width="14" height="14" viewBox="0 0 32 32" fill="none"><path d="M16 4L26 28H6L16 4Z" fill="#000"/><path d="M16 12L21 24H11L16 12Z" fill="#fff"/></svg>
+      </div>
+      BANK OF AI
     </a>
     <nav class="header-nav">
-      <button>Components <svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
-      <button>Developers <svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
-      <button>Community <svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+      <a href="#">Components</a>
+      <a href="#">Developers</a>
+      <a href="#">Community</a>
     </nav>
-    <div class="header-right">
-      <button><svg class="i-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button>
-      <button><svg class="i-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg> EN</button>
+    <div class="header-actions">
+      <a href="#" class="btn-outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+        Docs
+      </a>
+      <a href="#" class="btn-fill">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+        GitHub
+      </a>
     </div>
-    <button class="mobile-toggle" onclick="this.classList.toggle('open')">
-      <span></span><span></span><span></span>
-    </button>
   </div>
 </header>
 
-<!-- ==================== HERO ==================== -->
+<!-- HERO -->
 <section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid-overlay hero-grid"></div>
-  <div class="hero-glow" style="top:5rem;left:25%;width:18rem;height:18rem;background:rgba(59,130,246,0.1);"></div>
-  <div class="hero-glow" style="bottom:5rem;right:25%;width:24rem;height:24rem;background:rgba(139,92,246,0.06);"></div>
-  <div class="hero-glow" style="top:50%;left:50%;transform:translate(-50%,-50%);width:37rem;height:37rem;background:rgba(99,102,241,0.04);"></div>
-  <div class="hero-shape animate-float" style="top:8rem;right:15%;width:12px;height:12px;background:rgba(96,165,250,0.3);transform:rotate(45deg);"></div>
-  <div class="hero-shape animate-float-delayed" style="top:12rem;left:20%;width:8px;height:8px;background:rgba(192,132,252,0.4);border-radius:50%;"></div>
-  <div class="hero-shape animate-float" style="bottom:8rem;right:25%;width:16px;height:16px;border:1px solid rgba(96,165,250,0.2);transform:rotate(12deg);"></div>
-  <div class="hero-shape animate-float-delayed" style="bottom:12rem;left:15%;width:10px;height:10px;background:rgba(251,191,36,0.3);border-radius:50%;"></div>
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-badge"><span class="dot"></span> Live on TRON &amp; BNB Chain</div>
+        <h1 class="hero-title">BANK OF <em>AI</em></h1>
+        <p class="hero-desc">On-chain payments, identities, and DeFi for AI agents. Starting with <strong>TRON</strong> &amp; <strong>BNB Chain</strong> — expanding to all chains.</p>
 
-  <div class="hero-content">
-    <div class="hero-badge">
-      <span class="dot"></span>
-      Live on TRON &amp; BNB Chain
-    </div>
-    <h1>BANK OF <span class="ai-text"><span class="gradient-text">AI</span>
-      <svg style="position:absolute;bottom:-8px;left:0;width:100%;" viewBox="0 0 100 8" fill="none"><path d="M0 6C20 2 40 1 50 3C60 5 80 2 100 4" stroke="url(#ug)" stroke-width="2" stroke-linecap="round"/><defs><linearGradient id="ug" x1="0" y1="0" x2="100" y2="0"><stop stop-color="#3b82f6"/><stop offset=".5" stop-color="#8b5cf6"/><stop offset="1" stop-color="#ec4899"/></linearGradient></defs></svg>
-    </span></h1>
-    <p class="hero-subtitle">
-      On-chain payments, identities, and DeFi for AI agents.<br>
-      Starting with <span class="tron">TRON</span> &amp; <span class="bnb">BNB Chain</span> — expanding to all chains.
-    </p>
-    <div class="hero-ctas">
-      <a href="#" class="btn-primary">
-        <svg class="i-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
-        View on GitHub
-        <svg class="i-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-      <a href="#" class="btn-secondary">
-        <svg class="i-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-        Read the Docs
-      </a>
-    </div>
-    <div class="hero-chains">
-      <div class="chain-item">
-        <div class="chain-icon" style="background:rgba(239,68,68,0.2);color:var(--red-400);">T</div>
-        TRON
-      </div>
-      <div class="chain-divider"></div>
-      <div class="chain-item">
-        <div class="chain-icon" style="background:rgba(245,158,11,0.2);color:var(--amber-400);">B</div>
-        BNB Chain
-      </div>
-      <div class="chain-divider"></div>
-      <div class="chain-item">
-        <div class="chain-icon" style="background:rgba(100,116,139,0.2);color:var(--slate-400);">+</div>
-        More Soon
-      </div>
-    </div>
-  </div>
-  <div class="hero-fade"></div>
-</section>
+        <div class="hero-code">
+          <div class="hero-code-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
+            <span>Accept payments with one line of code</span>
+          </div>
+          <div class="hero-code-body"><span class="kw">import</span> { payWithX402 } <span class="kw">from</span> <span class="str">'@bankofai/sdk'</span>
 
-<!-- ==================== FEATURE 01: x402 ==================== -->
-<section class="feature-section">
-  <div class="feature-grid">
-    <div class="animate-fade-in-up">
-      <div class="feature-label"><span class="line"></span> 01</div>
-      <h2 class="feature-title">Complete x402<br>Standard Support</h2>
-      <p class="feature-desc">One line of code to accept on-chain payments. Currently supports TRON and BNB Chain, with more chains coming soon.</p>
-      <div class="feature-tags">
-        <span class="feature-tag"><svg class="i-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg> Client SDKs</span>
-        <span class="feature-tag"><svg class="i-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="6" cy="6" r="1"/><circle cx="6" cy="18" r="1"/></svg> Server SDKs</span>
-        <span class="feature-tag"><svg class="i-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Facilitator</span>
-      </div>
-    </div>
-    <div class="illustration-wrapper">
-      <div class="illustration-glow" style="background:linear-gradient(to right,rgba(219,234,254,0.5),rgba(243,232,255,0.5));"></div>
-      <div class="code-illustration" style="position:relative;">
-        <div class="code-tabs">
-          <button class="code-tab active"><span class="dot" style="background:var(--red-400);"></span> TRON</button>
-          <button class="code-tab inactive"><span class="dot" style="background:var(--amber-400);"></span> BNB Chain</button>
+<span class="kw">const</span> payment = <span class="kw">await</span> <span class="fn">payWithX402</span>({
+  chain: <span class="str">'tron'</span>,
+  amount: <span class="num">10</span>,
+  token: <span class="str">'USDT'</span>,
+  to:    <span class="str">'TXk8r...9Fq'</span>
+})</div>
+          <div class="code-result"><span class="dot"></span> Payment confirmed in 3s — zero fees, instant settlement</div>
         </div>
-        <div class="code-body">
-          <div><span class="kw">import</span> <span class="br">{ </span><span class="fn">payWithX402</span><span class="br"> }</span> <span class="kw">from</span> <span class="str">'@bankofai/sdk'</span></div>
-          <div style="margin-top:1rem;"><span class="kw">const</span> <span class="fn">payment</span> <span class="op">=</span> <span class="kw">await</span> <span class="br">payWithX402</span><span style="color:#cbd5e1;">({</span></div>
-          <div class="indent"><span class="fn">chain</span><span class="op">:</span> <span class="str">'tron'</span><span class="op">,</span></div>
-          <div class="indent"><span class="fn">amount</span><span class="op">:</span> <span class="num">10</span><span class="op">,</span></div>
-          <div class="indent"><span class="fn">token</span><span class="op">:</span> <span class="str">'USDT'</span><span class="op">,</span></div>
-          <div class="indent"><span class="fn">to</span><span class="op">:</span> <span class="str">'TXk8r...9Fq'</span></div>
-          <div><span style="color:#cbd5e1;">})</span></div>
-          <div class="result"><span class="dot"></span> ✓ Payment confirmed in 3s</div>
-        </div>
-        <div class="floating-badge animate-float" style="right:-12px;top:50%;transform:translateY(-50%);">
-          <div class="badge-icon" style="background:var(--emerald-100);color:var(--emerald-600);">✓</div>
-          <div class="badge-text"><strong>x402</strong><small>Standard</small></div>
+
+        <div class="hero-ctas">
+          <a href="#" class="btn-fill" style="padding:12px 24px;font-size:14px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+            View on GitHub
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#" class="btn-outline" style="padding:12px 24px;font-size:14px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+            Read the Docs
+          </a>
         </div>
       </div>
-    </div>
-  </div>
-</section>
 
-<!-- ==================== FEATURE 02: Identity ==================== -->
-<section class="feature-section alt">
-  <div class="feature-grid">
-    <div>
-      <div class="feature-label"><span class="line"></span> 02</div>
-      <h2 class="feature-title">On-chain Identity</h2>
-      <p class="feature-desc">Register and manage AI agent identities on TRON and BNB Chain. Built on the ERC-6551 standard for composable accounts.</p>
-      <div class="feature-tags">
-        <span class="feature-tag white purple"><svg class="i-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 10a3 3 0 10-3 3m6-3a9 9 0 11-9 9"/><circle cx="12" cy="10" r="1"/></svg> Unique Identity</span>
-        <span class="feature-tag white purple"><svg class="i-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg> Verifiable</span>
-        <span class="feature-tag white purple"><svg class="i-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Self-Sovereign</span>
-      </div>
-    </div>
-    <div class="illustration-wrapper">
-      <div class="illustration-glow" style="background:linear-gradient(to bottom-right,rgba(243,232,255,0.6),rgba(219,234,254,0.6));"></div>
-      <div style="position:relative;">
-        <div class="identity-card">
-          <div class="corner"></div>
-          <div class="identity-header">
-            <div class="identity-avatar">
-              <svg class="i-3xl" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+      <div class="hero-right">
+        <div class="hero-visual">
+          <div class="hero-visual-inner">
+            <div style="font-family:'Instrument Serif',serif;font-size:20px;letter-spacing:-0.02em;border-bottom:1px solid #e5e5e5;padding-bottom:16px;">How it works</div>
+            <div style="display:flex;flex-direction:column;gap:16px;padding:20px 0;">
+              <div style="display:flex;gap:12px;">
+                <div style="width:28px;height:28px;border:1px solid #000;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">1</div>
+                <div><div style="font-size:13px;font-weight:600;">Agent sends request</div><div style="font-size:11px;color:#999;font-family:'DM Mono',monospace;">HTTP → 402 Payment Required</div></div>
+              </div>
+              <div style="display:flex;gap:12px;">
+                <div style="width:28px;height:28px;border:1px solid #000;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">2</div>
+                <div><div style="font-size:13px;font-weight:600;">Agent pays on-chain</div><div style="font-size:11px;color:#999;font-family:'DM Mono',monospace;">USDT via TRON / BNB Chain</div></div>
+              </div>
+              <div style="display:flex;gap:12px;">
+                <div style="width:28px;height:28px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">3</div>
+                <div><div style="font-size:13px;font-weight:600;">Access granted</div><div style="font-size:11px;color:#1a7f37;font-family:'DM Mono',monospace;">✓ Instant, no KYC, no API keys</div></div>
+              </div>
             </div>
+            <div style="border-top:1px solid #e5e5e5;padding-top:16px;display:flex;gap:24px;">
+              <div><div style="font-family:'Instrument Serif',serif;font-size:24px;letter-spacing:-0.03em;">x402</div><div style="font-size:10px;color:#999;">Standard</div></div>
+              <div><div style="font-family:'Instrument Serif',serif;font-size:24px;letter-spacing:-0.03em;">8004</div><div style="font-size:10px;color:#999;">Identity</div></div>
+              <div><div style="font-family:'Instrument Serif',serif;font-size:24px;letter-spacing:-0.03em;">MCP</div><div style="font-size:10px;color:#999;">Servers</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="container">
+      <div class="stats-inner">
+        <div><div class="stat-num">x402</div><div class="stat-label">Payment Standard</div></div>
+        <div><div class="stat-num">2</div><div class="stat-label">Chains Supported</div></div>
+        <div><div class="stat-num">4</div><div class="stat-label">MCP Servers</div></div>
+        <div><div class="stat-num">8004</div><div class="stat-label">Identity Standard</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE 01: x402 -->
+<section class="feature">
+  <div class="container">
+    <div class="feature-grid">
+      <div>
+        <div class="feature-num">01</div>
+        <h2 class="feature-title">Complete x402<br>Standard Support</h2>
+        <p class="feature-desc">One line of code to accept on-chain payments. Currently supports TRON and BNB Chain, with more chains coming soon.</p>
+        <div class="feature-tags">
+          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg> Client SDKs</span>
+          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="6" cy="6" r="1"/><circle cx="6" cy="18" r="1"/></svg> Server SDKs</span>
+          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Facilitator</span>
+        </div>
+      </div>
+      <div style="position:relative;">
+        <div class="illust">
+          <div class="code-illust-header">
+            <div class="code-tab-item active"><span class="dot" style="background:#cf222e;"></span> TRON</div>
+            <div class="code-tab-item"><span class="dot" style="background:#bf8700;"></span> BNB Chain</div>
+          </div>
+          <div class="code-content"><span class="kw">import</span> { <span class="fn">payWithX402</span> } <span class="kw">from</span> <span class="str">'@bankofai/sdk'</span>
+
+<span class="kw">const</span> payment = <span class="kw">await</span> <span class="fn">payWithX402</span>({
+<span class="indent">chain:  <span class="str">'tron'</span>,</span>
+<span class="indent">amount: <span class="num">10</span>,</span>
+<span class="indent">token:  <span class="str">'USDT'</span>,</span>
+<span class="indent">to:     <span class="str">'TXk8r...9Fq'</span></span>
+})</div>
+          <div class="code-result"><span class="dot"></span> ✓ Payment confirmed in 3s</div>
+        </div>
+        <div class="float-label anim-float" style="right:-12px;top:40%;"><span class="ico">✓</span> x402 Standard</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE 02: Identity -->
+<section class="feature alt">
+  <div class="container">
+    <div class="feature-grid">
+      <div>
+        <div class="feature-num">02</div>
+        <h2 class="feature-title">On-chain Identity</h2>
+        <p class="feature-desc">Register and manage AI agent identities on TRON and BNB Chain. Built on the 8004 standard for composable accounts.</p>
+        <div class="feature-tags">
+          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M12 10a3 3 0 10-3 3m6-3a9 9 0 11-9 9"/><circle cx="12" cy="10" r="1"/></svg> Unique Identity</span>
+          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> Verifiable</span>
+          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Self-Sovereign</span>
+        </div>
+      </div>
+      <div style="position:relative;">
+        <div class="illust">
+          <div class="id-card">
+            <div class="id-card-header">
+              <div class="id-avatar">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.5"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+              </div>
+              <div>
+                <div class="id-name">AI Agent #1024</div>
+                <div class="id-verified"><span class="dot"></span> Verified</div>
+              </div>
+            </div>
+            <div class="addr-row">
+              <div class="addr-icon">T</div>
+              <div><div class="addr-label">TRON</div><div class="addr-val">TXk8rLGsKaDeAbhzy3nprBe6kRp9Fq</div></div>
+            </div>
+            <div class="addr-row">
+              <div class="addr-icon">B</div>
+              <div><div class="addr-label">BNB Chain</div><div class="addr-val">0x7a3b...e8f2c941d5</div></div>
+            </div>
+            <div class="id-footer">
+              <span>8004 Standard</span>
+              <span style="display:flex;gap:4px;"><span style="width:6px;height:6px;background:#000;display:inline-block;"></span><span style="width:6px;height:6px;background:#999;display:inline-block;"></span><span style="width:6px;height:6px;background:#ddd;display:inline-block;"></span></span>
+            </div>
+          </div>
+        </div>
+        <div class="float-label anim-float" style="left:-16px;top:24px;">
+          <span class="ico">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M12 10a3 3 0 10-3 3m6-3a9 9 0 11-9 9"/></svg>
+          </span>
+          DID Registered
+        </div>
+        <div class="float-label anim-float-d" style="right:-12px;bottom:32px;">
+          <span class="ico">✓</span> On-chain
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE 03: Asset Management -->
+<section class="feature">
+  <div class="container">
+    <div class="feature-grid">
+      <div>
+        <div class="feature-num">03</div>
+        <h2 class="feature-title">On-chain Asset<br>Management</h2>
+        <p class="feature-desc">AI agents autonomously lend, swap, and earn yield via MCP Server and Skills — plugged into the leading DeFi protocols.</p>
+        <div class="feature-tags" style="gap:8px;">
+          <span class="tag" style="border-color:#0550ae;color:#0550ae;">JustLend</span>
+          <span class="tag" style="border-color:#9a6700;color:#9a6700;">SunSwap</span>
+          <span class="tag" style="border-color:#0e7490;color:#0e7490;">PancakeSwap</span>
+          <span class="tag" style="border-color:#6e40c9;color:#6e40c9;">Lista</span>
+        </div>
+      </div>
+      <div style="position:relative;">
+        <div class="illust">
+          <div class="asset-header-row">
             <div>
-              <div class="identity-name">AI Agent #1024</div>
-              <span class="verified-badge"><span class="dot"></span> Verified</span>
+              <div class="asset-val-label">Portfolio Value</div>
+              <div class="asset-val-num">$24,892.54</div>
             </div>
+            <div class="asset-change-badge">↑ +12.4%</div>
           </div>
-          <div>
-            <div class="address-row">
-              <div class="address-icon" style="background:var(--red-100);color:var(--red-500);">T</div>
-              <div style="min-width:0;">
-                <div class="address-label">TRON</div>
-                <div class="address-value">TXk8rLGsKaDeAbhzy3nprBe6kRp9Fq</div>
-              </div>
-            </div>
-            <div class="address-row">
-              <div class="address-icon" style="background:var(--amber-100);color:var(--amber-600);">B</div>
-              <div style="min-width:0;">
-                <div class="address-label">BNB Chain</div>
-                <div class="address-value">0x7a3b...e8f2c941d5</div>
-              </div>
-            </div>
-          </div>
-          <div class="identity-footer">
-            <div class="standard">ERC-6551 TBA</div>
-            <div class="dots">
-              <span style="background:var(--blue-400);"></span>
-              <span style="background:var(--purple-400);"></span>
-              <span style="background:var(--emerald-400);"></span>
-            </div>
-          </div>
-        </div>
-        <div class="floating-badge animate-float" style="left:-24px;top:25%;">
-          <svg class="i-md" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><path d="M12 10a3 3 0 10-3 3m6-3a9 9 0 11-9 9"/><circle cx="12" cy="10" r="1"/></svg>
-          <span style="font-size:0.75rem;font-weight:500;color:var(--gray-700);">DID Registered</span>
-        </div>
-        <div class="floating-badge animate-float-delayed" style="right:-16px;bottom:32px;">
-          <svg class="i-md" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg>
-          <span style="font-size:0.75rem;font-weight:500;color:var(--gray-700);">On-chain</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== FEATURE 03: Asset Management ==================== -->
-<section class="feature-section">
-  <div class="feature-grid">
-    <div>
-      <div class="feature-label"><span class="line"></span> 03</div>
-      <h2 class="feature-title">On-chain Asset<br>Management</h2>
-      <p class="feature-desc">AI agents autonomously lend, swap, and earn yield via MCP toolkits and SDKs — plugged into the leading DeFi protocols.</p>
-      <div class="protocol-tags">
-        <span class="protocol-tag blue"><span class="dot"></span> JustLend</span>
-        <span class="protocol-tag orange"><span class="dot"></span> SunSwap</span>
-        <span class="protocol-tag cyan"><span class="dot"></span> PancakeSwap</span>
-        <span class="protocol-tag purple"><span class="dot"></span> Extra</span>
-      </div>
-    </div>
-    <div class="illustration-wrapper">
-      <div class="illustration-glow" style="background:linear-gradient(to bottom-right,rgba(209,250,229,0.5),rgba(219,234,254,0.5));"></div>
-      <div class="asset-dashboard">
-        <div class="asset-header">
-          <div>
-            <div class="label">Portfolio Value</div>
-            <div class="value">$24,892.54</div>
-          </div>
-          <div class="asset-change up">
-            <svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-            +12.4%
-          </div>
-        </div>
-        <div class="asset-chart">
-          <svg viewBox="0 0 400 80" style="width:100%;height:64px;" preserveAspectRatio="none">
-            <defs><linearGradient id="cf" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-color="#10b981" stop-opacity="0"/></linearGradient></defs>
-            <path d="M0 60 Q50 55 100 40 T200 30 T300 20 T400 15 V80 H0 Z" fill="url(#cf)"/>
-            <path d="M0 60 Q50 55 100 40 T200 30 T300 20 T400 15" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="400" cy="15" r="3" fill="#10b981"/>
-          </svg>
-        </div>
-        <div class="asset-list">
-          <div class="asset-item">
-            <div class="asset-item-left">
-              <div class="asset-icon" style="background:var(--emerald-500);">U</div>
-              <div><div class="asset-item-name">USDT</div><div class="asset-item-chain">TRON</div></div>
-            </div>
-            <div class="asset-item-right">
-              <div class="asset-item-amount">$15,200.00</div>
-              <div class="asset-item-change" style="color:var(--emerald-500);"><svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg> +2.1%</div>
-            </div>
-          </div>
-          <div class="asset-item">
-            <div class="asset-item-left">
-              <div class="asset-icon" style="background:var(--red-500);">T</div>
-              <div><div class="asset-item-name">TRX</div><div class="asset-item-chain">TRON</div></div>
-            </div>
-            <div class="asset-item-right">
-              <div class="asset-item-amount">$4,892.30</div>
-              <div class="asset-item-change" style="color:var(--emerald-500);"><svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg> +8.5%</div>
-            </div>
-          </div>
-          <div class="asset-item">
-            <div class="asset-item-left">
-              <div class="asset-icon" style="background:var(--amber-500);">B</div>
-              <div><div class="asset-item-name">BNB</div><div class="asset-item-chain">BSC</div></div>
-            </div>
-            <div class="asset-item-right">
-              <div class="asset-item-amount">$3,100.24</div>
-              <div class="asset-item-change" style="color:var(--red-500);"><svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 7l10 10M17 17H7M17 17V7"/></svg> -1.2%</div>
-            </div>
-          </div>
-          <div class="asset-item">
-            <div class="asset-item-left">
-              <div class="asset-icon" style="background:var(--blue-500);">U</div>
-              <div><div class="asset-item-name">USDC</div><div class="asset-item-chain">BSC</div></div>
-            </div>
-            <div class="asset-item-right">
-              <div class="asset-item-amount">$1,700.00</div>
-              <div class="asset-item-change" style="color:var(--emerald-500);"><svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg> +0.1%</div>
-            </div>
-          </div>
-        </div>
-        <div class="floating-badge animate-float" style="right:-16px;top:48px;">
-          <svg class="i-md" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg>
-          <div class="badge-text"><strong>APY 8.2%</strong><small>JustLend</small></div>
-        </div>
-        <div class="floating-badge animate-float-delayed" style="left:-24px;bottom:64px;">
-          <svg class="i-md" viewBox="0 0 16 16" fill="none" stroke="#3b82f6" stroke-width="1.5"><path d="M4 2v12M12 14V2M4 6l-2-2 2-2M12 10l2 2-2 2"/></svg>
-          <span style="font-size:0.75rem;font-weight:500;color:var(--gray-700);">Auto Swap</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== FEATURE 04: OpenClaw ==================== -->
-<section class="feature-section alt">
-  <div class="feature-grid">
-    <div>
-      <div class="feature-label"><span class="line"></span> 04</div>
-      <h2 class="feature-title">Drop-in OpenClaw<br>Integration</h2>
-      <p class="feature-desc">An extension that gives any OpenClaw agent full banking capabilities — payments, identities, DeFi — out of the box.</p>
-      <div class="feature-tags">
-        <span class="feature-tag white indigo"><svg class="i-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 01-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 10-3.214 3.214c.446.166.855.497.925.968a.979.979 0 01-.276.837l-1.61 1.61a2.404 2.404 0 01-1.705.707 2.402 2.402 0 01-1.704-.706l-1.568-1.568a1.026 1.026 0 00-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 11-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 00-.289-.877l-1.568-1.568A2.402 2.402 0 011.998 12c0-.617.236-1.234.706-1.704L4.23 8.77c.24-.24.581-.353.917-.303.515.077.877.528 1.073 1.01a2.5 2.5 0 103.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402 2.402 0 0112 1.998c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.968a2.5 2.5 0 113.237 3.237c-.464.18-.894.527-.967 1.02z"/></svg> Plug &amp; Play</span>
-        <span class="feature-tag white indigo"><svg class="i-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> Modular</span>
-      </div>
-    </div>
-    <div class="illustration-wrapper">
-      <div class="illustration-glow" style="background:linear-gradient(to bottom-right,rgba(224,231,255,0.5),rgba(243,232,255,0.5));"></div>
-      <div style="position:relative;">
-        <div class="diagram-container">
-          <div class="diagram">
-            <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 400 320" fill="none">
-              <line x1="200" y1="160" x2="60" y2="60" stroke="#c7d2fe" stroke-width="2" stroke-dasharray="4 4"/>
-              <line x1="200" y1="160" x2="340" y2="60" stroke="#c7d2fe" stroke-width="2" stroke-dasharray="4 4"/>
-              <line x1="200" y1="160" x2="60" y2="260" stroke="#c7d2fe" stroke-width="2" stroke-dasharray="4 4"/>
-              <line x1="200" y1="160" x2="340" y2="260" stroke="#c7d2fe" stroke-width="2" stroke-dasharray="4 4"/>
-              <circle r="3" fill="#6366f1"><animateMotion dur="3s" repeatCount="indefinite" path="M200,160 L60,60"/></circle>
-              <circle r="3" fill="#6366f1"><animateMotion dur="3s" repeatCount="indefinite" path="M200,160 L340,60"/></circle>
-              <circle r="3" fill="#6366f1"><animateMotion dur="3s" repeatCount="indefinite" path="M200,160 L60,260"/></circle>
-              <circle r="3" fill="#6366f1"><animateMotion dur="3s" repeatCount="indefinite" path="M200,160 L340,260"/></circle>
+          <div class="asset-chart-area">
+            <svg viewBox="0 0 400 60" style="width:100%;height:48px;" preserveAspectRatio="none">
+              <path d="M0 50 Q50 45 100 35 T200 25 T300 18 T400 12 V60 H0 Z" fill="#f0f0f0"/>
+              <path d="M0 50 Q50 45 100 35 T200 25 T300 18 T400 12" fill="none" stroke="#000" stroke-width="1.5"/>
+              <circle cx="400" cy="12" r="3" fill="#000"/>
             </svg>
-            <!-- Top-left -->
-            <div class="diagram-node tl">
-              <div class="node-icon" style="background:linear-gradient(to bottom-right,var(--indigo-500),var(--purple-600));">
-                <svg class="i-xl" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 01-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 10-3.214 3.214c.446.166.855.497.925.968a.979.979 0 01-.276.837l-1.61 1.61a2.404 2.404 0 01-1.705.707 2.402 2.402 0 01-1.704-.706l-1.568-1.568a1.026 1.026 0 00-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 11-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 00-.289-.877l-1.568-1.568A2.402 2.402 0 011.998 12c0-.617.236-1.234.706-1.704L4.23 8.77c.24-.24.581-.353.917-.303.515.077.877.528 1.073 1.01a2.5 2.5 0 103.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402 2.402 0 0112 1.998c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.968a2.5 2.5 0 113.237 3.237c-.464.18-.894.527-.967 1.02z"/></svg>
-              </div>
-              <div class="node-name">OpenClaw</div>
-              <div class="node-sub">AI Agent</div>
+          </div>
+          <div class="asset-list">
+            <div class="asset-row">
+              <div class="asset-row-left"><div class="asset-icon-sq">U</div><div><div class="asset-name">USDT</div><div class="asset-chain">TRON</div></div></div>
+              <div class="asset-row-right"><div class="asset-amt">$15,200.00</div><div class="asset-pct up">+2.1%</div></div>
             </div>
-            <!-- Top-right -->
-            <div class="diagram-node tr">
-              <div class="node-icon" style="background:linear-gradient(to bottom-right,var(--violet-500),var(--fuchsia-600));">
-                <svg class="i-xl" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-              </div>
-              <div class="node-name">Extension</div>
-              <div class="node-sub">Plugin</div>
+            <div class="asset-row">
+              <div class="asset-row-left"><div class="asset-icon-sq">T</div><div><div class="asset-name">TRX</div><div class="asset-chain">TRON</div></div></div>
+              <div class="asset-row-right"><div class="asset-amt">$4,892.30</div><div class="asset-pct up">+8.5%</div></div>
             </div>
-            <!-- Center -->
-            <div class="diagram-node center animate-pulse-glow">
-              <div class="node-icon center-icon">
-                <svg viewBox="0 0 32 32" fill="none" width="28" height="28"><path d="M16 2L28 28H4L16 2Z" fill="white" opacity="0.9"/><path d="M16 10L22 24H10L16 10Z" fill="#6366f1" opacity="0.6"/></svg>
-              </div>
-              <div class="node-name" style="color:#fff;">Bank of AI</div>
-              <div class="node-sub" style="color:rgba(191,219,254,0.8);">Core Engine</div>
+            <div class="asset-row">
+              <div class="asset-row-left"><div class="asset-icon-sq">B</div><div><div class="asset-name">BNB</div><div class="asset-chain">BSC</div></div></div>
+              <div class="asset-row-right"><div class="asset-amt">$3,100.24</div><div class="asset-pct down">-1.2%</div></div>
             </div>
-            <!-- Bottom-left -->
-            <div class="diagram-node bl">
-              <div class="node-icon" style="background:linear-gradient(to bottom-right,var(--emerald-500),var(--teal-600));">
-                <svg class="i-xl" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
-              </div>
-              <div class="node-name">Payments</div>
-              <div class="node-sub">x402</div>
+            <div class="asset-row">
+              <div class="asset-row-left"><div class="asset-icon-sq">U</div><div><div class="asset-name">USDC</div><div class="asset-chain">BSC</div></div></div>
+              <div class="asset-row-right"><div class="asset-amt">$1,700.00</div><div class="asset-pct up">+0.1%</div></div>
             </div>
-            <!-- Bottom-right -->
-            <div class="diagram-node br">
-              <div class="node-icon" style="background:linear-gradient(to bottom-right,var(--amber-500),var(--orange-600));">
-                <svg class="i-xl" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+        </div>
+        <div class="float-label anim-float" style="right:-16px;top:24px;">
+          <span class="ico" style="font-size:10px;">↑</span> APY 8.2% · JustLend
+        </div>
+        <div class="float-label anim-float-d" style="left:-20px;bottom:48px;">
+          <span class="ico">⇄</span> Auto Swap
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE 04: OpenClaw -->
+<section class="feature alt">
+  <div class="container">
+    <div class="feature-grid">
+      <div>
+        <div class="feature-num">04</div>
+        <h2 class="feature-title">Drop-in OpenClaw<br>Integration</h2>
+        <p class="feature-desc">An extension that gives any OpenClaw agent full banking capabilities — payments, identities, DeFi — out of the box.</p>
+        <div class="feature-tags">
+          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> Plug &amp; Play</span>
+          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg> Modular</span>
+        </div>
+      </div>
+      <div>
+        <div class="illust">
+          <div class="diagram-wrap">
+            <div class="diagram-box">
+              <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 380 300" fill="none">
+                <line x1="190" y1="150" x2="50" y2="40" stroke="#000" stroke-width="1" stroke-dasharray="4 4" class="anim-dash"/>
+                <line x1="190" y1="150" x2="330" y2="40" stroke="#000" stroke-width="1" stroke-dasharray="4 4" class="anim-dash"/>
+                <line x1="190" y1="150" x2="50" y2="260" stroke="#000" stroke-width="1" stroke-dasharray="4 4" class="anim-dash"/>
+                <line x1="190" y1="150" x2="330" y2="260" stroke="#000" stroke-width="1" stroke-dasharray="4 4" class="anim-dash"/>
+                <circle r="3" fill="#000"><animateMotion dur="2s" repeatCount="indefinite" path="M190,150 L50,40"/></circle>
+                <circle r="3" fill="#000"><animateMotion dur="2s" repeatCount="indefinite" path="M190,150 L330,40"/></circle>
+                <circle r="3" fill="#000"><animateMotion dur="2s" repeatCount="indefinite" path="M190,150 L50,260"/></circle>
+                <circle r="3" fill="#000"><animateMotion dur="2s" repeatCount="indefinite" path="M190,150 L330,260"/></circle>
+              </svg>
+              <div class="d-node tl">
+                <div class="d-node-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+                <div class="d-node-name">OpenClaw</div>
+                <div class="d-node-sub">AI Agent</div>
               </div>
-              <div class="node-name">Identities</div>
-              <div class="node-sub">DeFi</div>
+              <div class="d-node tr">
+                <div class="d-node-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+                <div class="d-node-name">Extension</div>
+                <div class="d-node-sub">Plugin</div>
+              </div>
+              <div class="d-node center">
+                <div class="d-node-icon"><svg width="14" height="14" viewBox="0 0 32 32" fill="none"><path d="M16 4L26 28H6L16 4Z" fill="#fff"/><path d="M16 12L21 24H11L16 12Z" fill="#666"/></svg></div>
+                <div class="d-node-name">Bank of AI</div>
+                <div class="d-node-sub">Core Engine</div>
+              </div>
+              <div class="d-node bl">
+                <div class="d-node-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></div>
+                <div class="d-node-name">Payments</div>
+                <div class="d-node-sub">x402</div>
+              </div>
+              <div class="d-node br">
+                <div class="d-node-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87"/></svg></div>
+                <div class="d-node-name">Identities</div>
+                <div class="d-node-sub">DeFi</div>
+              </div>
             </div>
           </div>
         </div>
@@ -971,205 +712,101 @@
   </div>
 </section>
 
-<!-- ==================== MCP SERVERS ==================== -->
-<section class="mcp-section">
-  <div class="section-header">
-    <h2 class="section-title">MCP Server Ecosystem</h2>
-    <p class="section-desc">Ready-to-use MCP servers that let AI agents interact with TRON DeFi protocols — plug in and go.</p>
-  </div>
-  <div class="mcp-grid">
-    <!-- TRON -->
-    <div class="mcp-card">
-      <div class="mcp-card-header">
-        <div class="mcp-card-icon" style="background:linear-gradient(to bottom-right,var(--red-500),var(--rose-600));">
-          <svg class="i-2xl" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>
-        </div>
-        <div>
-          <div class="mcp-card-name">TRON-MCP-Server</div>
-          <p class="mcp-card-desc">Core TRON blockchain operations — transfers, balance queries, contract calls, and account management for AI agents.</p>
-        </div>
-      </div>
-      <div class="mcp-tags">
-        <span class="mcp-tag" style="background:var(--red-50);color:var(--red-600);">Transfer</span>
-        <span class="mcp-tag" style="background:var(--red-50);color:var(--red-600);">Balance</span>
-        <span class="mcp-tag" style="background:var(--red-50);color:var(--red-600);">Contract</span>
-        <span class="mcp-tag" style="background:var(--red-50);color:var(--red-600);">Account</span>
-      </div>
-      <div class="mcp-card-footer">
-        <a href="#"><svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg> GitHub</a>
-        <a href="#"><svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Docs</a>
-        <a href="#" class="external"><svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
-      </div>
+<!-- MCP SERVERS -->
+<section class="mcp">
+  <div class="container">
+    <div class="section-header center">
+      <h2>MCP Server Ecosystem</h2>
+      <p>Ready-to-use MCP servers that let AI agents interact with TRON DeFi protocols — plug in and go.</p>
     </div>
-    <!-- SUK -->
-    <div class="mcp-card">
-      <div class="mcp-card-header">
-        <div class="mcp-card-icon" style="background:linear-gradient(to bottom-right,var(--orange-500),var(--amber-600));">
-          <svg class="i-2xl" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>
+    <div class="mcp-grid">
+      <div class="mcp-card">
+        <div class="mcp-card-top">
+          <div class="mcp-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg></div>
+          <div><div class="mcp-name">TRON-MCP-Server</div><div class="mcp-desc">Core TRON blockchain operations — transfers, balance queries, contract calls, and account management for AI agents.</div></div>
         </div>
-        <div>
-          <div class="mcp-card-name">SUK-MCP-Server</div>
-          <p class="mcp-card-desc">SunSwap DEX integration — token swaps, liquidity management, price queries, and pool analytics for AI agents.</p>
+        <div class="mcp-tags"><span class="mcp-tag">Transfer</span><span class="mcp-tag">Balance</span><span class="mcp-tag">Contract</span><span class="mcp-tag">Account</span></div>
+        <div class="mcp-links"><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg> GitHub</a><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Docs</a></div>
+      </div>
+      <div class="mcp-card">
+        <div class="mcp-card-top">
+          <div class="mcp-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg></div>
+          <div><div class="mcp-name">SUN-MCP-Server</div><div class="mcp-desc">SunSwap DEX integration — token swaps, liquidity management, price queries, and pool analytics for AI agents.</div></div>
         </div>
+        <div class="mcp-tags"><span class="mcp-tag">Swap</span><span class="mcp-tag">Liquidity</span><span class="mcp-tag">Price</span><span class="mcp-tag">Pools</span></div>
+        <div class="mcp-links"><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg> GitHub</a><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Docs</a></div>
       </div>
-      <div class="mcp-tags">
-        <span class="mcp-tag" style="background:var(--orange-50);color:var(--orange-600);">Swap</span>
-        <span class="mcp-tag" style="background:var(--orange-50);color:var(--orange-600);">Liquidity</span>
-        <span class="mcp-tag" style="background:var(--orange-50);color:var(--orange-600);">Price</span>
-        <span class="mcp-tag" style="background:var(--orange-50);color:var(--orange-600);">Pools</span>
-      </div>
-      <div class="mcp-card-footer">
-        <a href="#"><svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg> GitHub</a>
-        <a href="#"><svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Docs</a>
-        <a href="#" class="external"><svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
-      </div>
-    </div>
-    <!-- JustLend -->
-    <div class="mcp-card">
-      <div class="mcp-card-header">
-        <div class="mcp-card-icon" style="background:linear-gradient(to bottom-right,var(--blue-500),var(--indigo-600));">
-          <svg class="i-2xl" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>
+      <div class="mcp-card">
+        <div class="mcp-card-top">
+          <div class="mcp-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg></div>
+          <div><div class="mcp-name">JustLend-MCP-Server</div><div class="mcp-desc">JustLend protocol integration — lending, borrowing, deposit management, and yield optimization for AI agents.</div></div>
         </div>
-        <div>
-          <div class="mcp-card-name">JustLend-MCP-Server</div>
-          <p class="mcp-card-desc">JustLend protocol integration — lending, borrowing, deposit management, and yield optimization for AI agents.</p>
+        <div class="mcp-tags"><span class="mcp-tag">Lend</span><span class="mcp-tag">Borrow</span><span class="mcp-tag">Deposit</span><span class="mcp-tag">Yield</span></div>
+        <div class="mcp-links"><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg> GitHub</a><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Docs</a></div>
+      </div>
+      <div class="mcp-card">
+        <div class="mcp-card-top">
+          <div class="mcp-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg></div>
+          <div><div class="mcp-name">TronScan-MCP-Server</div><div class="mcp-desc">TronScan explorer integration — on-chain data queries, transaction tracking, statistics analytics, and token info for AI agents.</div></div>
         </div>
-      </div>
-      <div class="mcp-tags">
-        <span class="mcp-tag" style="background:var(--blue-50);color:var(--blue-600);">Lend</span>
-        <span class="mcp-tag" style="background:var(--blue-50);color:var(--blue-600);">Borrow</span>
-        <span class="mcp-tag" style="background:var(--blue-50);color:var(--blue-600);">Deposit</span>
-        <span class="mcp-tag" style="background:var(--blue-50);color:var(--blue-600);">Yield</span>
-      </div>
-      <div class="mcp-card-footer">
-        <a href="#"><svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg> GitHub</a>
-        <a href="#"><svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Docs</a>
-        <a href="#" class="external"><svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
-      </div>
-    </div>
-    <!-- TronScan -->
-    <div class="mcp-card">
-      <div class="mcp-card-header">
-        <div class="mcp-card-icon" style="background:linear-gradient(to bottom-right,var(--emerald-500),var(--teal-600));">
-          <svg class="i-2xl" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>
-        </div>
-        <div>
-          <div class="mcp-card-name">TronScan-MCP-Server</div>
-          <p class="mcp-card-desc">TronScan explorer integration — on-chain data queries, transaction tracking, statistics analytics, and token info for AI agents.</p>
-        </div>
-      </div>
-      <div class="mcp-tags">
-        <span class="mcp-tag" style="background:var(--emerald-50);color:var(--emerald-600);">Query</span>
-        <span class="mcp-tag" style="background:var(--emerald-50);color:var(--emerald-600);">Tracking</span>
-        <span class="mcp-tag" style="background:var(--emerald-50);color:var(--emerald-600);">Analytics</span>
-        <span class="mcp-tag" style="background:var(--emerald-50);color:var(--emerald-600);">Tokens</span>
-      </div>
-      <div class="mcp-card-footer">
-        <a href="#"><svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg> GitHub</a>
-        <a href="#"><svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Docs</a>
-        <a href="#" class="external"><svg class="i-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+        <div class="mcp-tags"><span class="mcp-tag">Query</span><span class="mcp-tag">Tracking</span><span class="mcp-tag">Analytics</span><span class="mcp-tag">Tokens</span></div>
+        <div class="mcp-links"><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg> GitHub</a><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Docs</a></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ==================== LIVE DEMO ==================== -->
-<section class="demo-section">
-  <div class="max-w-7xl px-6">
-    <div class="section-header" style="text-align:center;margin-bottom:4rem;">
-      <div class="demo-badge"><span class="dot"></span> Interactive Preview</div>
-      <h2 style="font-size:2.25rem;font-weight:700;color:var(--gray-900);margin-bottom:1rem;">Live Demo</h2>
-      <p style="color:var(--gray-500);font-size:1.125rem;max-width:42rem;margin:0 auto;">OpenClaw + BANK OF AI — real interactions on TRON and BNB Chain.</p>
+<!-- LIVE DEMO -->
+<section class="demo">
+  <div class="container">
+    <div class="section-header center">
+      <div class="demo-badge"><span class="dot" style="width:6px;height:6px;border-radius:50%;background:#000;animation:pulse 1.5s ease-in-out infinite;"></span> Interactive Preview</div>
+      <h2>Live Demo</h2>
+      <p>OpenClaw + BANK OF AI — real interactions on TRON and BNB Chain.</p>
     </div>
     <div class="demo-grid">
-      <!-- TRON Chat -->
-      <div class="chat-window">
-        <div class="chat-header">
-          <div class="chat-avatar" style="background:linear-gradient(to bottom-right,var(--red-500),var(--rose-600));">
-            <svg class="i-xl" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 8V4H8"/><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M2 12h6M2 18h6M2 6h6"/></svg>
-          </div>
-          <div>
-            <div class="chat-title">BANK OF AI Agent — TRON</div>
-            <div class="chat-subtitle">TRON Network Operations</div>
-          </div>
-          <div class="chat-status"><span class="dot"></span> <span>Online</span></div>
+      <!-- TRON -->
+      <div class="chat">
+        <div class="chat-hd">
+          <div class="chat-avatar-sq"><svg width="14" height="14" viewBox="0 0 32 32" fill="none"><path d="M16 4L26 28H6L16 4Z" fill="#000"/></svg></div>
+          <div><div class="chat-hd-title">BANK OF AI Agent — TRON</div><div class="chat-hd-sub">TRON Network Operations</div></div>
+          <div class="chat-status"><span class="dot"></span><span>Online</span></div>
         </div>
-        <div class="chat-messages">
-          <div class="chat-msg user">
-            <div class="msg-avatar user-av"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-            <div class="msg-bubble user-msg">Check TRX Balance</div>
-          </div>
-          <div class="chat-msg">
-            <div class="msg-avatar agent-av"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M2 12h6M2 18h6M2 6h6"/></svg></div>
-            <div class="msg-bubble info">Current Balance: 4,892 TRX ($489.20)</div>
-          </div>
-          <div class="chat-msg user">
-            <div class="msg-avatar user-av"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-            <div class="msg-bubble user-msg">Transfer 10 TRX to Txm...7Kpq</div>
-          </div>
-          <div class="chat-msg">
-            <div class="msg-avatar agent-av"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M2 12h6M2 18h6M2 6h6"/></svg></div>
-            <div class="msg-bubble action">✓ Sent 10 TRX to Txm...7Kpq</div>
-          </div>
-          <div class="chat-msg user">
-            <div class="msg-avatar user-av"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-            <div class="msg-bubble user-msg">Check My USDT Balance</div>
-          </div>
-          <div class="chat-msg">
-            <div class="msg-avatar agent-av"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M2 12h6M2 18h6M2 6h6"/></svg></div>
-            <div class="msg-bubble info">Current Balance: 15,200 USDT</div>
-          </div>
+        <div class="chat-body">
+          <div class="msg user"><div class="msg-av">U</div><div class="msg-text">Check TRX Balance</div></div>
+          <div class="msg"><div class="msg-av">A</div><div class="msg-text info">Current Balance: 4,892 TRX ($489.20)</div></div>
+          <div class="msg user"><div class="msg-av">U</div><div class="msg-text">Transfer 10 TRX to Txm...7Kpq</div></div>
+          <div class="msg"><div class="msg-av">A</div><div class="msg-text action">✓ Sent 10 TRX to Txm...7Kpq</div></div>
+          <div class="msg user"><div class="msg-av">U</div><div class="msg-text">Check My USDT Balance</div></div>
+          <div class="msg"><div class="msg-av">A</div><div class="msg-text info">Current Balance: 15,200 USDT</div></div>
         </div>
-        <div class="chat-input">
-          <div class="chat-input-inner">
+        <div class="chat-input-area">
+          <div class="chat-input-row">
             <input type="text" placeholder="Message..." readonly>
-            <button class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+            <button class="chat-send"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
           </div>
         </div>
       </div>
-      <!-- BNB Chat -->
-      <div class="chat-window">
-        <div class="chat-header">
-          <div class="chat-avatar" style="background:linear-gradient(to bottom-right,var(--amber-500),var(--orange-600));">
-            <svg class="i-xl" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 8V4H8"/><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M2 12h6M2 18h6M2 6h6"/></svg>
-          </div>
-          <div>
-            <div class="chat-title">BANK OF AI Agent — BNB Chain</div>
-            <div class="chat-subtitle">BNB Chain Market Data</div>
-          </div>
-          <div class="chat-status"><span class="dot"></span> <span>Online</span></div>
+      <!-- BNB -->
+      <div class="chat">
+        <div class="chat-hd">
+          <div class="chat-avatar-sq"><svg width="14" height="14" viewBox="0 0 32 32" fill="none"><path d="M16 4L26 28H6L16 4Z" fill="#000"/></svg></div>
+          <div><div class="chat-hd-title">BANK OF AI Agent — BNB Chain</div><div class="chat-hd-sub">BNB Chain Market Data</div></div>
+          <div class="chat-status"><span class="dot"></span><span>Online</span></div>
         </div>
-        <div class="chat-messages">
-          <div class="chat-msg user">
-            <div class="msg-avatar user-av"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-            <div class="msg-bubble user-msg">Retrieve Market Data from https://bankofai.io</div>
-          </div>
-          <div class="chat-msg">
-            <div class="msg-avatar agent-av"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M2 12h6M2 18h6M2 6h6"/></svg></div>
-            <div class="msg-bubble status">← HTTP 402: Payment of $0.01 required</div>
-          </div>
-          <div class="chat-msg">
-            <div class="msg-avatar agent-av"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M2 12h6M2 18h6M2 6h6"/></svg></div>
-            <div class="msg-bubble action">Processing payment to unlock resource...</div>
-          </div>
-          <div class="chat-msg">
-            <div class="msg-avatar agent-av"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M2 12h6M2 18h6M2 6h6"/></svg></div>
-            <div class="msg-bubble action">✓ Payment Confirmed: $0.01 USDT (BNB Chain Mainnet)</div>
-          </div>
-          <div class="chat-msg">
-            <div class="msg-avatar agent-av"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M2 12h6M2 18h6M2 6h6"/></svg></div>
-            <div class="msg-bubble info">Market Update:</div>
-          </div>
-          <div class="chat-msg">
-            <div class="msg-avatar agent-av"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M2 12h6M2 18h6M2 6h6"/></svg></div>
-            <div class="msg-bubble info">BNB $612.78 | TRX $0.108 | MKR $3,300
-Volume 24h: ↑ Trend Bullish</div>
-          </div>
+        <div class="chat-body">
+          <div class="msg user"><div class="msg-av">U</div><div class="msg-text">Retrieve Market Data from https://bankofai.io</div></div>
+          <div class="msg"><div class="msg-av">A</div><div class="msg-text status">← HTTP 402: Payment of $0.01 required</div></div>
+          <div class="msg"><div class="msg-av">A</div><div class="msg-text action">Processing payment to unlock resource...</div></div>
+          <div class="msg"><div class="msg-av">A</div><div class="msg-text action">✓ Payment Confirmed: $0.01 USDT (BNB Chain Mainnet)</div></div>
+          <div class="msg"><div class="msg-av">A</div><div class="msg-text info">Market Update:</div></div>
+          <div class="msg"><div class="msg-av">A</div><div class="msg-text info">BNB $612.78 | TRX $0.108 | MKR $3,300
+Volume 24h: ↑ Trend Bullish</div></div>
         </div>
-        <div class="chat-input">
-          <div class="chat-input-inner">
+        <div class="chat-input-area">
+          <div class="chat-input-row">
             <input type="text" placeholder="Message..." readonly>
-            <button class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+            <button class="chat-send"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
           </div>
         </div>
       </div>
@@ -1177,54 +814,26 @@ Volume 24h: ↑ Trend Bullish</div>
   </div>
 </section>
 
-<!-- ==================== FOOTER ==================== -->
+<!-- FOOTER -->
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-grid">
       <div class="footer-brand">
-        <div class="logo">
-          <svg viewBox="0 0 32 32" fill="none" width="28" height="28">
-            <path d="M16 2L28 28H4L16 2Z" fill="url(#flg)"/>
-            <path d="M16 10L22 24H10L16 10Z" fill="white" opacity="0.3"/>
-            <defs><linearGradient id="flg" x1="4" y1="28" x2="28" y2="2"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
-          </svg>
+        <div class="logo-f">
+          <div class="mark"><svg width="12" height="12" viewBox="0 0 32 32" fill="none"><path d="M16 4L26 28H6L16 4Z" fill="#fff"/><path d="M16 12L21 24H11L16 12Z" fill="#666"/></svg></div>
           <span>BANK OF AI</span>
         </div>
         <p>On-chain payments, identities, and DeFi for AI agents.</p>
       </div>
-      <div class="footer-col">
-        <h4>Product</h4>
-        <ul>
-          <li><a href="#">x402 Payments</a></li>
-          <li><a href="#">On-chain Identity</a></li>
-          <li><a href="#">Asset Management</a></li>
-          <li><a href="#">OpenClaw Extension</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Developers</h4>
-        <ul>
-          <li><a href="#">Documentation</a></li>
-          <li><a href="#">MCP Servers</a></li>
-          <li><a href="#">SDK Reference</a></li>
-          <li><a href="#">API Guide</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Community</h4>
-        <ul>
-          <li><a href="#">GitHub</a></li>
-          <li><a href="#">Discord</a></li>
-          <li><a href="#">Twitter</a></li>
-          <li><a href="#">Blog</a></li>
-        </ul>
-      </div>
+      <div class="footer-col"><h4>Product</h4><ul><li><a href="#">x402 Payments</a></li><li><a href="#">On-chain Identity</a></li><li><a href="#">Asset Management</a></li><li><a href="#">OpenClaw Extension</a></li></ul></div>
+      <div class="footer-col"><h4>Developers</h4><ul><li><a href="#">Documentation</a></li><li><a href="#">MCP Servers</a></li><li><a href="#">SDK Reference</a></li><li><a href="#">API Guide</a></li></ul></div>
+      <div class="footer-col"><h4>Community</h4><ul><li><a href="#">GitHub</a></li><li><a href="#">Discord</a></li><li><a href="#">Twitter</a></li><li><a href="#">Blog</a></li></ul></div>
     </div>
     <div class="footer-bottom">
       <div class="copy">&copy; 2026 Bank of AI. All rights reserved.</div>
       <div class="footer-socials">
-        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg></a>
-        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></a>
       </div>
     </div>
   </div>
